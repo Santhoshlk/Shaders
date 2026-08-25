@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Prism/Prism.vcxproj" Id="cf0d2df9-6f78-4df8-b103-b2dba23ebd49" />
+</Solution>
