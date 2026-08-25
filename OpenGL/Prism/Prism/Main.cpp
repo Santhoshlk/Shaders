@@ -69,4 +69,5 @@ int main(void)
 
     // when its done remove glfw completely
     glfwTerminate();
+    // done
 }
