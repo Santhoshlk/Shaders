@@ -3,6 +3,8 @@
 #include <string.h>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <fstream>
+#include <sstream>
 
 const GLint width = 1000, height = 500;
 
@@ -11,6 +13,67 @@ GLFWwindow* mainwindow = nullptr;
 GLint bufferwidth, bufferheight;
 
 GLuint VBO,VAO;
+
+// create a struct for storing the string of vertex and fragment shaders
+struct Shaders
+{
+    std::string vs;
+    std::string fs;
+};
+
+enum class ShaderType : uint8_t
+{
+    none,
+    vertex,
+    fragment
+};
+Shaders ParseFile(const std::string& infile)
+{
+   
+    //create an object of ifstream
+    std::ifstream inf(infile);
+
+    if (!inf)
+    {
+        std::cout << "I am not able to open the file" << std::endl;
+        return { "","" };
+    }
+
+    // next create a array of sstream
+    std::stringstream s[2];
+
+    ShaderType st = ShaderType::none;
+    std::string line;
+
+    while (std::getline(inf, line))
+    {
+        // get the line check for #shader
+        if (line.find("#shader") != std::string::npos)
+        {
+            // check if it is vertes
+            if (line.find("vertex") != std::string::npos)
+                st = ShaderType::vertex;
+            if (line.find("fragment") != std::string::npos)
+                st = ShaderType::fragment;
+        }
+        else
+        {
+            if (st == ShaderType::vertex)
+            {
+                s[0] << line << "\n";
+            }
+            else if (st == ShaderType::fragment)
+            {
+                s[1] << line << "\n";
+            }
+        }
+     
+    }
+
+    // now just return the struct
+    return { s[0].str(),s[1].str() };
+}
+
 
 
 // create two functions to create the shader program and compile shaders
@@ -71,14 +134,18 @@ unsigned int ShaderProgram(const std::string& VertexShader, const std::string& F
     unsigned int vs = CompileShader(GL_VERTEX_SHADER, VertexShader);
     unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, FragmentShader);
 
+    if (!vs && fs)
+    {
+        return 0;
+    }
+
     // u need to attach Shaders to Program
     glAttachShader(ProgramId,vs);
     glAttachShader(ProgramId,fs);
 
     glLinkProgram(ProgramId);
     glValidateProgram(ProgramId);
-    glDeleteShader(vs);
-    glDeleteShader(fs);
+   
 
     int result;
     glGetProgramiv(ProgramId, GL_LINK_STATUS,&result);
@@ -94,33 +161,13 @@ unsigned int ShaderProgram(const std::string& VertexShader, const std::string& F
         std::cout << message << std::endl;
         return 0;
     }
-
+    glDeleteShader(vs);
+    glDeleteShader(fs);
     return ProgramId;
    
 }
 
 
-static const std::string VertexShader = R"(
-#version 460 core
-
-layout(location = 0) in vec2 Pos;
-
-void main()
-{
-   gl_Position = vec4(vec3(Pos,0.f),1.f);
-}
-)";
-
-static const std::string FragmentShader = R"(
-#version 460 core
-
-out vec4 Color;
-
-void main()
-{
-   Color = vec4(0.f,0.f,1.f,1.f);
-}
-)";
 
 
 
@@ -199,7 +246,13 @@ int main(void)
     
     VertexSpecification();
 
-    unsigned int programid = ShaderProgram(VertexShader, FragmentShader);
+    Shaders source = ParseFile(std::string("FirstShader.txt"));
+
+    unsigned int programid = ShaderProgram(source.vs, source.fs);
+    if (!programid)
+    {
+        return 1;
+    }
     while (!glfwWindowShouldClose(mainwindow))
     {
         // poll for events
