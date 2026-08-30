@@ -6,13 +6,13 @@
 #include <fstream>
 #include <sstream>
 
-const GLint width = 1000, height = 500;
+const unsigned int width = 1000, height = 500;
 
 GLFWwindow* mainwindow = nullptr;
 
-GLint bufferwidth, bufferheight;
+int bufferwidth, bufferheight;
 
-GLuint VBO,VAO;
+unsigned int VBO, VAO,IBO;
 
 // create a struct for storing the string of vertex and fragment shaders
 struct Shaders
@@ -29,7 +29,7 @@ enum class ShaderType : uint8_t
 };
 Shaders ParseFile(const std::string& infile)
 {
-   
+
     //create an object of ifstream
     std::ifstream inf(infile);
 
@@ -67,7 +67,7 @@ Shaders ParseFile(const std::string& infile)
                 s[1] << line << "\n";
             }
         }
-     
+
     }
 
     // now just return the struct
@@ -77,7 +77,7 @@ Shaders ParseFile(const std::string& infile)
 
 
 // create two functions to create the shader program and compile shaders
- 
+
 unsigned int CompileShader(unsigned int ShaderType, const std::string& Shader)
 {
     unsigned int ShaderId = glCreateShader(ShaderType);
@@ -92,7 +92,7 @@ unsigned int CompileShader(unsigned int ShaderType, const std::string& Shader)
 
     int status;
     // shader error handling
-    glGetShaderiv(ShaderId,GL_COMPILE_STATUS,&status);
+    glGetShaderiv(ShaderId, GL_COMPILE_STATUS, &status);
 
     if (!status)
     {
@@ -120,11 +120,11 @@ unsigned int CompileShader(unsigned int ShaderType, const std::string& Shader)
             std::cout << message << std::endl;
         }
         return 0;
-     }
+    }
 
 
     return ShaderId;
-   
+
 }
 
 unsigned int ShaderProgram(const std::string& VertexShader, const std::string& FragmentShader)
@@ -134,21 +134,21 @@ unsigned int ShaderProgram(const std::string& VertexShader, const std::string& F
     unsigned int vs = CompileShader(GL_VERTEX_SHADER, VertexShader);
     unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, FragmentShader);
 
-    if (!vs && fs)
+    if (!vs || !fs)
     {
         return 0;
     }
 
     // u need to attach Shaders to Program
-    glAttachShader(ProgramId,vs);
-    glAttachShader(ProgramId,fs);
+    glAttachShader(ProgramId, vs);
+    glAttachShader(ProgramId, fs);
 
     glLinkProgram(ProgramId);
     glValidateProgram(ProgramId);
-   
+
 
     int result;
-    glGetProgramiv(ProgramId, GL_LINK_STATUS,&result);
+    glGetProgramiv(ProgramId, GL_LINK_STATUS, &result);
 
     if (!result)
     {
@@ -164,7 +164,7 @@ unsigned int ShaderProgram(const std::string& VertexShader, const std::string& F
     glDeleteShader(vs);
     glDeleteShader(fs);
     return ProgramId;
-   
+
 }
 
 
@@ -185,16 +185,30 @@ void VertexSpecification()
 
     // tell how to traverse the data
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0,2,GL_FLOAT,GL_FALSE,sizeof(float)*2,reinterpret_cast<const void*>(0));
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, reinterpret_cast<const void*>(0));
 
     // the data
-    float vertices[6] = {
-      -0.5f,0.f,
-      0.5f,0.f,
-      0.f,0.5f
+    float vertices[] = {
+      -0.25f,0.f,//0
+      0.25f,0.f,//1
+      0.25f,1.f,//2
+      -0.25f,1.f,//3
     };
     // u are currently binding this buffer
-    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), vertices, GL_STATIC_DRAW);
+
+    //now tell how to traverse by using the ibo
+    glGenBuffers(1, &IBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,IBO);
+
+    // the actual array data
+    unsigned int indices[6] = {
+     0,1,2,
+     2,3,0
+    };
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,6* sizeof(unsigned int),indices,GL_STATIC_DRAW);
+
+    glVertexArrayElementBuffer(VAO, IBO);
 }
 
 int main(void)
@@ -243,7 +257,7 @@ int main(void)
     // now create the viewport
     glViewport(0, 0, bufferwidth, bufferheight);
 
-    
+
     VertexSpecification();
 
     Shaders source = ParseFile(std::string("FirstShader.txt"));
@@ -261,9 +275,10 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(programid);
+        
         glBindVertexArray(VAO);
-        // now u can actually use draw calls
-        glDrawArrays(GL_TRIANGLES,0,3);
+        // draw the elements
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
         // now swap the buffer
         glfwSwapBuffers(mainwindow);
