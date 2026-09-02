@@ -262,11 +262,24 @@ int main(void)
 
     Shaders source = ParseFile(std::string("FirstShader.txt"));
 
+    
+
     unsigned int programid = ShaderProgram(source.vs, source.fs);
     if (!programid)
     {
         return 1;
     }
+    // here we are using the same program and vao so just bind it once
+    glUseProgram(programid);
+
+    // u can retrive the location of the uniform variable
+    int location = glGetUniformLocation(programid,"u_color");
+
+    // now ur shaders are known and compiled use here
+    float r = 0.0;
+    bool flag = false;
+
+    glBindVertexArray(VAO);
     while (!glfwWindowShouldClose(mainwindow))
     {
         // poll for events
@@ -274,12 +287,24 @@ int main(void)
 
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glUseProgram(programid);
-        
-        glBindVertexArray(VAO);
+        glUniform4f(location, r, 0.0, 0.0, 1.0);
         // draw the elements
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
+        if (!flag)
+        {
+           if (r >= 1.f) flag = true;
+            r += 0.001f;
+
+        }
+        else
+        {
+            if (r <= 0.f) flag = false;
+            r -= 0.001f;
+        }
+           
+      
+       
         // now swap the buffer
         glfwSwapBuffers(mainwindow);
     }

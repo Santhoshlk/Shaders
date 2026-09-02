@@ -11,9 +11,10 @@ void main()
 #shader fragment
 #version 460 core
 
+uniform vec4 u_color;
 layout(location = 0)out vec4 Color;
 
 void main()
 {
-   Color = vec4(0.f,0.f,1.f,1.f);
+   Color = u_color;
 }
