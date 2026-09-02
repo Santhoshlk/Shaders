@@ -1,7 +1,7 @@
 #shader vertex 
 #version 460 core
 
-layout(location = 0) in vec2 Pos;
+layout(location = 3) in vec2 Pos;
 
 void main()
 {
