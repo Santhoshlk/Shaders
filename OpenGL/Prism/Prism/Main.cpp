@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 #include <fstream>
 #include <sstream>
+#include <cassert>
 
 const unsigned int width = 1000, height = 500;
 
@@ -169,9 +170,6 @@ unsigned int ShaderProgram(const std::string& VertexShader, const std::string& F
 
 
 
-
-
-
 void VertexSpecification()
 {
 
@@ -184,8 +182,8 @@ void VertexSpecification()
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
     // tell how to traverse the data
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, reinterpret_cast<const void*>(0));
+    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, reinterpret_cast<const void*>(0));
 
     // the data
     float vertices[] = {
@@ -208,7 +206,7 @@ void VertexSpecification()
     };
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,6* sizeof(unsigned int),indices,GL_STATIC_DRAW);
 
-    glVertexArrayElementBuffer(VAO, IBO);
+   
 }
 
 int main(void)
@@ -270,22 +268,29 @@ int main(void)
         return 1;
     }
     // here we are using the same program and vao so just bind it once
-    glUseProgram(programid);
+  
 
     // u can retrive the location of the uniform variable
     int location = glGetUniformLocation(programid,"u_color");
+
+    assert("Either u are not using the uniform variable or the name u wrote is wrong" && location!=-1 );
+    
 
     // now ur shaders are known and compiled use here
     float r = 0.0;
     bool flag = false;
 
-    glBindVertexArray(VAO);
+   
     while (!glfwWindowShouldClose(mainwindow))
     {
         // poll for events
         glfwPollEvents();
 
         glClear(GL_COLOR_BUFFER_BIT);
+
+        glUseProgram(programid);
+        glBindVertexArray(VAO);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 
         glUniform4f(location, r, 0.0, 0.0, 1.0);
         // draw the elements
@@ -312,6 +317,7 @@ int main(void)
     // just remove all
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &IBO);
     glDeleteProgram(programid);
 
     // when its done remove glfw completely
