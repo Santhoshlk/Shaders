@@ -183,34 +183,40 @@ void VertexSpecification()
 
     // tell how to traverse the data
     glEnableVertexAttribArray(3);
-    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, reinterpret_cast<const void*>(0));
+    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, reinterpret_cast<const void*>(0));
 
     // the data
     float vertices[] = {
-      -0.25f,0.f,//0
-      0.25f,0.f,//1
-      0.25f,1.f,//2
-      -0.25f,1.f,//3
+      -0.25f,0.f, 1.0,0.0,0.0,//0
+      0.25f,0.f,0.0,1.0,0.0,//1
+      0.25f,1.f,0.0,0.0,1.0//2
     };
+
+    //do this again
+    glEnableVertexAttribArray(4);
+    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), reinterpret_cast<const void*>(2*sizeof(float)));
+
     // u are currently binding this buffer
-    glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 15 * sizeof(float), vertices, GL_STATIC_DRAW);
 
     //now tell how to traverse by using the ibo
     glGenBuffers(1, &IBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,IBO);
 
     // the actual array data
-    unsigned int indices[6] = {
-     0,1,2,
-     2,3,0
+    unsigned int indices[] = {
+     0,1,2
     };
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,6* sizeof(unsigned int),indices,GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,3* sizeof(unsigned int),indices,GL_STATIC_DRAW);
 
    
 }
 
 int main(void)
 {
+    // extension name 
+
+
     // init glfw
     if (!glfwInit())
     {
@@ -271,9 +277,9 @@ int main(void)
   
 
     // u can retrive the location of the uniform variable
-    int location = glGetUniformLocation(programid,"u_color");
+    //int location = glGetUniformLocation(programid,"u_color");
 
-    assert("Either u are not using the uniform variable or the name u wrote is wrong" && location!=-1 );
+    //assert("Either u are not using the uniform variable or the name u wrote is wrong" && location!=-1 );
     
 
     // now ur shaders are known and compiled use here
@@ -292,21 +298,21 @@ int main(void)
         glBindVertexArray(VAO);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 
-        glUniform4f(location, r, 0.0, 0.0, 1.0);
+        //glUniform4f(location, r, 0.0, 0.0, 1.0);
         // draw the elements
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 
-        if (!flag)
-        {
-           if (r >= 1.f) flag = true;
-            r += 0.001f;
+        //if (!flag)
+        //{
+        //   if (r >= 1.f) flag = true;
+        //    r += 0.001f;
 
-        }
-        else
-        {
-            if (r <= 0.f) flag = false;
-            r -= 0.001f;
-        }
+        //}
+        //else
+        //{
+        //    if (r <= 0.f) flag = false;
+        //    r -= 0.001f;
+        //}
            
       
        
