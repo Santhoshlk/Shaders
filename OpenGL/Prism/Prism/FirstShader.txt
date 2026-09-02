@@ -1,20 +1,25 @@
 #shader vertex 
 #version 460 core
 
+
 layout(location = 3) in vec2 Pos;
+layout(location = 4) in vec3 vcolor;
+
+out vec4 fcolor;
 
 void main()
 {
    gl_Position = vec4(vec3(Pos,0.f),1.f);
+   fcolor = vec4(vcolor,1.f);
 }
 
 #shader fragment
 #version 460 core
 
-uniform vec4 u_color;
+in vec4 fcolor;
 layout(location = 0)out vec4 Color;
 
 void main()
 {
-   Color = u_color;
+   Color = fcolor;
 }
