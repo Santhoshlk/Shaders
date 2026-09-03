@@ -139,7 +139,10 @@
             "c:\\program files\\microsoft visual studio\\18\\community\\vc\\tools\\msvc\\14.51.36231\\include\\__msvc_filebuf.hpp",
             "c:\\program files\\microsoft visual studio\\18\\community\\vc\\tools\\msvc\\14.51.36231\\include\\sstream",
             "c:\\program files\\microsoft visual studio\\18\\community\\vc\\tools\\msvc\\14.51.36231\\include\\cassert",
-            "c:\\program files (x86)\\windows kits\\10\\include\\10.0.26100.0\\ucrt\\assert.h"
+            "c:\\program files (x86)\\windows kits\\10\\include\\10.0.26100.0\\ucrt\\assert.h",
+            "d:\\rendering\\opengl\\prism\\prism\\vertexbuffers.h",
+            "d:\\rendering\\opengl\\prism\\prism\\renderer.h",
+            "d:\\rendering\\opengl\\prism\\prism\\indexbuffer.h"
         ],
         "ImportedModules": [],
         "ImportedHeaderUnits": []

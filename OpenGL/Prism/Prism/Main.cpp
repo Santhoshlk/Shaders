@@ -7,6 +7,9 @@
 #include <sstream>
 #include <cassert>
 
+#include "VertexBuffers.h"
+#include "IndexBuffer.h"
+
 const unsigned int width = 1000, height = 500;
 
 GLFWwindow* mainwindow = nullptr;
@@ -169,49 +172,6 @@ unsigned int ShaderProgram(const std::string& VertexShader, const std::string& F
 }
 
 
-
-void VertexSpecification()
-{
-
-    // create the vertex array
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
-
-
-    glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-    // tell how to traverse the data
-    glEnableVertexAttribArray(3);
-    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, reinterpret_cast<const void*>(0));
-
-    // the data
-    float vertices[] = {
-      -0.25f,0.f, 1.0,0.0,0.0,//0
-      0.25f,0.f,0.0,1.0,0.0,//1
-      0.25f,1.f,0.0,0.0,1.0//2
-    };
-
-    //do this again
-    glEnableVertexAttribArray(4);
-    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), reinterpret_cast<const void*>(2*sizeof(float)));
-
-    // u are currently binding this buffer
-    glBufferData(GL_ARRAY_BUFFER, 15 * sizeof(float), vertices, GL_STATIC_DRAW);
-
-    //now tell how to traverse by using the ibo
-    glGenBuffers(1, &IBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,IBO);
-
-    // the actual array data
-    unsigned int indices[] = {
-     0,1,2
-    };
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,3* sizeof(unsigned int),indices,GL_STATIC_DRAW);
-
-   
-}
-
 int main(void)
 {
     // extension name 
@@ -260,13 +220,49 @@ int main(void)
 
     // now create the viewport
     glViewport(0, 0, bufferwidth, bufferheight);
+  {  
+    // create the vertex array
+    glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO);
 
 
-    VertexSpecification();
+
+
+
+    // the data
+    float vertices[] = {
+      -0.25f,0.f, 1.0,0.0,0.0,//0
+      0.25f,0.f,0.0,1.0,0.0,//1
+      0.25f,1.f,0.0,0.0,1.0//2
+    };
+
+    VertexBuffers buffer(vertices, 15 * sizeof(float));
+
+
+    // tell how to traverse the attribute 1
+    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, reinterpret_cast<const void*>(0));
+
+    // tell how to traverse attribute 2
+    glEnableVertexAttribArray(4);
+    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), reinterpret_cast<const void*>(2 * sizeof(float)));
+
+
+    // the actual array data
+    unsigned int indices[] = {
+     0,1,2
+    };
+
+    IndexBuffer ibo(indices, 3 * sizeof(unsigned int));
+
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3 * sizeof(unsigned int), indices, GL_STATIC_DRAW);
+
+
+
 
     Shaders source = ParseFile(std::string("FirstShader.txt"));
 
-    
+
 
     unsigned int programid = ShaderProgram(source.vs, source.fs);
     if (!programid)
@@ -274,19 +270,19 @@ int main(void)
         return 1;
     }
     // here we are using the same program and vao so just bind it once
-  
+
 
     // u can retrive the location of the uniform variable
     //int location = glGetUniformLocation(programid,"u_color");
 
     //assert("Either u are not using the uniform variable or the name u wrote is wrong" && location!=-1 );
-    
+
 
     // now ur shaders are known and compiled use here
     float r = 0.0;
     bool flag = false;
 
-   
+
     while (!glfwWindowShouldClose(mainwindow))
     {
         // poll for events
@@ -296,8 +292,7 @@ int main(void)
 
         glUseProgram(programid);
         glBindVertexArray(VAO);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-
+        ibo.Bind();
         //glUniform4f(location, r, 0.0, 0.0, 1.0);
         // draw the elements
         glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
@@ -313,19 +308,17 @@ int main(void)
         //    if (r <= 0.f) flag = false;
         //    r -= 0.001f;
         //}
-           
-      
-       
+
+
+
         // now swap the buffer
         glfwSwapBuffers(mainwindow);
     }
 
     // just remove all
     glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &IBO);
     glDeleteProgram(programid);
-
+  }
     // when its done remove glfw completely
     glfwTerminate();
     // done
