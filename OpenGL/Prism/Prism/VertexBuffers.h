@@ -11,9 +11,13 @@ private:
 public:
     VertexBuffers(const void* bufferdata, unsigned int buffersize);
 
+    VertexBuffers(const VertexBuffers& buffer) = delete;
+    VertexBuffers& operator=(const VertexBuffers& buffer) = delete;
+
+
     // functions are bind and unbind
-   void Bind();
-   void UnBind();
+   void Bind() const;
+   void UnBind() const;
 
 
     ~VertexBuffers();

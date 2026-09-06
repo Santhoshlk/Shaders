@@ -1,6 +1,6 @@
 #include "IndexBuffer.h"
 
-IndexBuffer::IndexBuffer(const unsigned int* bufferdata, unsigned int buffersize) : count(buffersize/sizeof(unsigned int))
+IndexBuffer::IndexBuffer(const unsigned int* bufferdata, unsigned int buffersize) : m_count(buffersize/sizeof(unsigned int))
 {
     glGenBuffers(1, &m_RenderId);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RenderId);
@@ -21,6 +21,6 @@ IndexBuffer::~IndexBuffer()
 {
     glDeleteBuffers(1, &m_RenderId);
     m_RenderId = 0;
-    count = 0;
+    m_count = 0;
 
 }

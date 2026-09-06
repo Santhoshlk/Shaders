@@ -9,6 +9,8 @@
 
 #include "VertexBuffers.h"
 #include "IndexBuffer.h"
+#include "VertexArray.h"
+#include "BufferLayout.h" 
 
 const unsigned int width = 1000, height = 500;
 
@@ -222,13 +224,8 @@ int main(void)
     glViewport(0, 0, bufferwidth, bufferheight);
   {  
     // create the vertex array
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
-
-
-
-
-
+        VertexArray vao;
+ 
     // the data
     float vertices[] = {
       -0.25f,0.f, 1.0,0.0,0.0,//0
@@ -238,26 +235,28 @@ int main(void)
 
     VertexBuffers buffer(vertices, 15 * sizeof(float));
 
+    BufferLayout layout;
 
-    // tell how to traverse the attribute 1
-    glEnableVertexAttribArray(3);
-    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, reinterpret_cast<const void*>(0));
+    // stride is running calculated and offset cast is done at add buffers
+    layout.PushBuffers(3, 2, GL_FLOAT, GL_FALSE,0);
+    layout.PushBuffers(4, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(float));
+    //// tell how to traverse the attribute 1
+    //glEnableVertexAttribArray(3);
+    //glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, reinterpret_cast<const void*>(0));
 
-    // tell how to traverse attribute 2
-    glEnableVertexAttribArray(4);
-    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), reinterpret_cast<const void*>(2 * sizeof(float)));
+    //// tell how to traverse attribute 2
+    //glEnableVertexAttribArray(4);
+    //glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), reinterpret_cast<const void*>(2 * sizeof(float)));
 
+    vao.Bind();
+    vao.addBuffer(buffer, layout);
 
     // the actual array data
     unsigned int indices[] = {
      0,1,2
     };
 
-    IndexBuffer ibo(indices, 3 * sizeof(unsigned int));
-
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3 * sizeof(unsigned int), indices, GL_STATIC_DRAW);
-
-
+    IndexBuffer ibo(indices, 3 * sizeof(unsigned int)); 
 
 
     Shaders source = ParseFile(std::string("FirstShader.txt"));
@@ -291,7 +290,7 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(programid);
-        glBindVertexArray(VAO);
+        vao.Bind();
         ibo.Bind();
         //glUniform4f(location, r, 0.0, 0.0, 1.0);
         // draw the elements
