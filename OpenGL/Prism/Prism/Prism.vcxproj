@@ -142,17 +142,21 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BufferLayout.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="VertexArray.cpp" />
     <ClCompile Include="VertexBuffers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="FirstShader.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BufferLayout.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="VertexArray.h" />
     <ClInclude Include="VertexBuffers.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

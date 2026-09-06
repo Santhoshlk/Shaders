@@ -7,7 +7,8 @@ class IndexBuffer
 private:
     // u need id and count 
     unsigned int m_RenderId;
-    unsigned int count;
+    //unique indices ibo has to work with 
+    unsigned int m_count;
 public:
     IndexBuffer(const unsigned int* bufferdata, unsigned int buffersize);
 
@@ -15,6 +16,10 @@ public:
     void Bind();
 
     void UnBind();
+
+    // do not have copy constuctor and assignment
+    IndexBuffer(const IndexBuffer& ind) = delete;
+    IndexBuffer& operator=(const IndexBuffer& ind) = delete;
 
 
     ~IndexBuffer();

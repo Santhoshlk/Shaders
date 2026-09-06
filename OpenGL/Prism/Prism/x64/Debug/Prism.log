@@ -1,7 +1,4 @@
-﻿  IndexBuffer.cpp
+﻿  BufferLayout.cpp
   Main.cpp
-  Renderer.cpp
-  VertexBuffers.cpp
   Generating Code...
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
   Prism.vcxproj -> D:\Rendering\OpenGL\Prism\x64\Debug\Prism.exe
