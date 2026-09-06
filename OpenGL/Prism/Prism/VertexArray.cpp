@@ -19,7 +19,7 @@ void VertexArray::UnBind()
 {
     glBindVertexArray(0);
 }
-
+    
 void VertexArray::addBuffer(const VertexBuffers& buffer, const BufferLayout& bufferlayout)
 {
     buffer.Bind();

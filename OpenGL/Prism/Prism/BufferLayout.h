@@ -21,7 +21,7 @@ private:
   // u can have a vector that has all the layouts for one buffer
     std::vector<BufferElements> m_elements;
     // stride is common
-    size_t m_stride;
+    size_t m_stride = 0;
 public:
   // getter for the array
     const std::vector<BufferElements>& getElements() const;

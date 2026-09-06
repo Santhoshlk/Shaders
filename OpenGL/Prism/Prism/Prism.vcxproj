@@ -146,6 +146,7 @@
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="VertexArray.cpp" />
     <ClCompile Include="VertexBuffers.cpp" />
   </ItemGroup>
@@ -156,6 +157,7 @@
     <ClInclude Include="BufferLayout.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="VertexArray.h" />
     <ClInclude Include="VertexBuffers.h" />
   </ItemGroup>
