@@ -12,6 +12,7 @@
 #include "VertexArray.h"
 #include "BufferLayout.h" 
 #include "ShaderProgram.h"
+#include "Renderer.h"
 
 const unsigned int width = 1000, height = 500;
 
@@ -19,7 +20,7 @@ GLFWwindow* mainwindow = nullptr;
 
 int bufferwidth, bufferheight;
 
-unsigned int VBO, VAO,IBO;
+unsigned int VBO, VAO, IBO;
 
 int main(void)
 {
@@ -69,65 +70,100 @@ int main(void)
 
     // now create the viewport
     glViewport(0, 0, bufferwidth, bufferheight);
-  {  
-    // create the vertex array
-        VertexArray vao;
- 
-    // the data
-    float vertices[] = {
-      -0.25f,0.f, 1.0,0.0,0.0,//0
-      0.25f,0.f,0.0,1.0,0.0,//1
-      0.25f,1.f,0.0,0.0,1.0//2
-    };
-
-    VertexBuffers buffer(vertices, 15 * sizeof(float));
-
-    BufferLayout layout;
-
-   
-    layout.PushBuffers(3, 2, GL_FLOAT, GL_FALSE,0);
-    layout.PushBuffers(4, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(float));
-
-
-    vao.Bind();
-    vao.addBuffer(buffer, layout);
-
-    // the actual array data
-    unsigned int indices[] = {
-     0,1,2
-    };
-
-    IndexBuffer ibo(indices, 3 * sizeof(unsigned int)); 
-
-
-
-   
-
-    ShaderProgram program("FirstShader.txt");
-
-
-    program.Bind();
-
-    float r = 0.0;
-    bool flag = false;
-
-
-    while (!glfwWindowShouldClose(mainwindow))
     {
-        // poll for events
-        glfwPollEvents();
+        // create the vertex array
+        VertexArray vao;
 
-        glClear(GL_COLOR_BUFFER_BIT);
+        // the data
+        float vertices[] = {
+          -0.25f,0.f, 1.0,0.0,0.0,//0
+          0.25f,0.f,0.0,1.0,0.0,//1
+          0.25f,1.f,0.0,0.0,1.0,//2
+          -0.25,1.f,0.f,1.f,0.f//3
+        };
+
+        VertexBuffers buffer(vertices, 20 * sizeof(float));
+
+        BufferLayout layout;
+
+
+        layout.PushBuffers(3, 2, GL_FLOAT, GL_FALSE, 0);
+        layout.PushBuffers(4, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(float));
+
+
+        vao.Bind();
+        vao.addBuffer(buffer, layout);
+
+        // the actual array data
+        unsigned int indices[] = {
+         0,1,2,
+         2,3,0
+        };
+
+        IndexBuffer ibo(indices, 6 * sizeof(unsigned int));
+
+
+        ShaderProgram program("FirstShader.txt");
+
 
         program.Bind();
-        vao.Bind();
-        ibo.Bind();
-      
-        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 
-        glfwSwapBuffers(mainwindow);
+        float r = 0.0;
+        bool flag = false;
+
+       int location =  glGetUniformLocation(program.getProgramId(), "u_alpha");
+       
+       if (location == -1)
+       {
+           std::cout << "Location is not valid" << std::endl;
+       }
+
+       Renderer renderer;
+
+        while (!glfwWindowShouldClose(mainwindow))
+        {
+            // poll for events
+            glfwPollEvents();
+
+            renderer.Clear();
+
+            program.Bind();
+            vao.Bind();
+            ibo.Bind();
+            
+            glUniform1f(location, r);
+            renderer.BlendAlpha();
+            renderer.Draw(vao, ibo, program);
+
+            if (r <= 1.f)
+            {
+                if (!flag)
+                {
+                    r += 0.005f;
+                }
+                else
+                {
+                    if (r <= 0.f)
+                    {
+                        r = 0.f;
+                        flag = false;
+                    }
+                    else
+                    {
+                        r -= 0.005f;
+                    }
+                }
+            }
+            else
+            {
+                r = 1.f;
+                flag = true;
+            }
+
+
+            glfwSwapBuffers(mainwindow);
+        }
     }
-  }
     // when its done remove glfw completely
     glfwTerminate();
     // done

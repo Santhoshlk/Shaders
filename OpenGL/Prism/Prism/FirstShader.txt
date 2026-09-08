@@ -5,21 +5,22 @@
 layout(location = 3) in vec2 Pos;
 layout(location = 4) in vec3 vcolor;
 
-out vec4 fcolor;
+out vec3 fcolor;
 
 void main()
 {
    gl_Position = vec4(vec3(Pos,0.f),1.f);
-   fcolor = vec4(vcolor,1.f);
+   fcolor = vcolor;
 }
 
 #shader fragment
 #version 460 core
 
-in vec4 fcolor;
+in vec3 fcolor;
+uniform float u_alpha;
 layout(location = 0)out vec4 Color;
 
 void main()
 {
-   Color = fcolor;
+   Color = vec4(fcolor,u_alpha);
 }

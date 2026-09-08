@@ -2,6 +2,7 @@
 
 unsigned int ShaderProgram::CompileShader(unsigned int ShaderType, const std::string& Shader)
 {
+
     unsigned int ShaderId = glCreateShader(ShaderType);
 
     const char* source = Shader.c_str();
@@ -80,6 +81,8 @@ unsigned int ShaderProgram::CreateShaderProgram(const std::string& VertexShader,
         glGetProgramInfoLog(ProgramId, length, &length, message);
         std::cout << "There is an error in Program linking stage" << std::endl;
         std::cout << message << std::endl;
+        glDeleteShader(vs);
+        glDeleteShader(fs);
         return 0;
     }
     glDeleteShader(vs);
@@ -90,18 +93,16 @@ unsigned int ShaderProgram::CreateShaderProgram(const std::string& VertexShader,
 ShaderProgram::ShaderProgram(const std::string& filetoParse)
 {
     Shaders source = ParseFile(filetoParse);
-   m_ProgramId =  CreateShaderProgram(source.vs, source.fs);
+    m_ProgramId = CreateShaderProgram(source.vs, source.fs);
 }
 
 
-
-
-void ShaderProgram::Bind()
+void ShaderProgram::Bind() const
 {
     glUseProgram(m_ProgramId);
 }
 
-void ShaderProgram::UnBind()
+void ShaderProgram::UnBind() const
 {
     glUseProgram(0);
 }
@@ -119,46 +120,46 @@ ShaderProgram::~ShaderProgram()
 Shaders ParseFile(const std::string& infile)
 {
 
-        //create an object of ifstream
-        std::ifstream inf(infile);
+    //create an object of ifstream
+    std::ifstream inf(infile);
 
-        if (!inf)
+    if (!inf)
+    {
+        std::cout << "I am not able to open the file" << std::endl;
+        return { "","" };
+    }
+
+    // next create a array of sstream
+    std::stringstream s[2];
+
+    ShaderType st = ShaderType::none;
+    std::string line;
+
+    while (std::getline(inf, line))
+    {
+        // get the line check for #shader
+        if (line.find("#shader") != std::string::npos)
         {
-            std::cout << "I am not able to open the file" << std::endl;
-            return { "","" };
+            // check if it is vertes
+            if (line.find("vertex") != std::string::npos)
+                st = ShaderType::vertex;
+            if (line.find("fragment") != std::string::npos)
+                st = ShaderType::fragment;
+        }
+        else
+        {
+            if (st == ShaderType::vertex)
+            {
+                s[0] << line << "\n";
+            }
+            else if (st == ShaderType::fragment)
+            {
+                s[1] << line << "\n";
+            }
         }
 
-        // next create a array of sstream
-        std::stringstream s[2];
+    }
 
-        ShaderType st = ShaderType::none;
-        std::string line;
-
-        while (std::getline(inf, line))
-        {
-            // get the line check for #shader
-            if (line.find("#shader") != std::string::npos)
-            {
-                // check if it is vertes
-                if (line.find("vertex") != std::string::npos)
-                    st = ShaderType::vertex;
-                if (line.find("fragment") != std::string::npos)
-                    st = ShaderType::fragment;
-            }
-            else
-            {
-                if (st == ShaderType::vertex)
-                {
-                    s[0] << line << "\n";
-                }
-                else if (st == ShaderType::fragment)
-                {
-                    s[1] << line << "\n";
-                }
-            }
-
-        }
-
-        // now just return the struct
-        return { s[0].str(),s[1].str() };
+    // now just return the struct
+    return { s[0].str(),s[1].str() };
 }

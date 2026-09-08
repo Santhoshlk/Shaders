@@ -13,15 +13,17 @@ public:
     IndexBuffer(const unsigned int* bufferdata, unsigned int buffersize);
 
     // unbind and bind matters in IndexBuffer
-    void Bind();
+    void Bind() const;
 
-    void UnBind();
+    void UnBind() const;
 
     // do not have copy constuctor and assignment
     IndexBuffer(const IndexBuffer& ind) = delete;
     IndexBuffer& operator=(const IndexBuffer& ind) = delete;
 
 
+    // u can get the count so we can pass in the triangles
+    unsigned int GetCount() const;
     ~IndexBuffer();
 
 

@@ -37,8 +37,8 @@ public:
     
     ShaderProgram(const std::string& filetoParse);
   
-    void Bind();
-    void UnBind();
+    void Bind() const;
+    void UnBind() const;
 
     const unsigned int& getProgramId() const;
 
