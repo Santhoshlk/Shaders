@@ -18,8 +18,8 @@ public:
 
     VertexArray();
 
-    void Bind();
-    void UnBind();
+    void Bind() const;
+    void UnBind() const;
     void addBuffer(const VertexBuffers& buffer, const BufferLayout& bufferlayout);
 
 

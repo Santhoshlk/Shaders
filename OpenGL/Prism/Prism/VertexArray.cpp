@@ -10,12 +10,12 @@ VertexArray::VertexArray()
     glBindVertexArray(m_RenderId);
 }
 
-void VertexArray::Bind()
+void VertexArray::Bind() const
 {
     glBindVertexArray(m_RenderId);
 }
 
-void VertexArray::UnBind()
+void VertexArray::UnBind() const
 {
     glBindVertexArray(0);
 }
