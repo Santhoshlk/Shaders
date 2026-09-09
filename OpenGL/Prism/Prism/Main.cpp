@@ -1,11 +1,10 @@
 #include <iostream>
 #include <string>
-#include <string.h>
+#include <cstring>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <fstream>
-#include <sstream>
 #include <cassert>
+#include <array>
 
 #include "VertexBuffers.h"
 #include "IndexBuffer.h"
@@ -15,7 +14,7 @@
 #include "Renderer.h"
 #include "Texture.h"
 
-const unsigned int width = 1000, height = 500;
+const unsigned int width = 1500, height = 750;
 
 GLFWwindow* mainwindow = nullptr;
 
@@ -36,7 +35,7 @@ int main(void)
         return 1;
     }
 
-    // set the prequistics of the window
+    // set the prerequisites of the window
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -62,7 +61,7 @@ int main(void)
 
     if (glewInit() != GLEW_OK)
     {
-        std::cout << "glew Initialization failed" << std::endl;
+        std::cout << "GLEW Initialization failed" << std::endl;
         glfwDestroyWindow(mainwindow);
         glfwTerminate();
         return 1;
@@ -75,33 +74,35 @@ int main(void)
         // create the vertex array
         VertexArray vao;
 
+        constexpr int v_size = 16;
         // the data
-        float vertices[] = {
-          -0.25f,0.f, 1.0,0.0,0.0,//0
-          0.25f,0.f,0.0,1.0,0.0,//1
-          0.25f,1.f,0.0,0.0,1.0,//2
-          -0.25,1.f,0.f,1.f,0.f//3
+        std::array<float,v_size> vertices = {
+          -0.25f,0.f,0.f,0.f,//0
+          0.25f,0.f,1.f,0.f,//1
+          0.25f,1.f,1.f,1.f,//2
+          -0.25,1.f,0.f,1.f//3
         };
 
-        VertexBuffers buffer(vertices, 20 * sizeof(float));
+        VertexBuffers buffer(vertices.data(), vertices.size() * sizeof(float));
 
         BufferLayout layout;
 
 
-        layout.PushBuffers(3, 2, GL_FLOAT, GL_FALSE, 0);
-        layout.PushBuffers(4, 3, GL_FLOAT, GL_FALSE, 2 * sizeof(float));
+        layout.PushBuffers(0, 2, GL_FLOAT, GL_FALSE, 0);
+        layout.PushBuffers(1, 2, GL_FLOAT, GL_FALSE,2*sizeof(float));
 
 
         vao.Bind();
         vao.addBuffer(buffer, layout);
 
+        constexpr int ibo_size = 6;
         // the actual array data
-        unsigned int indices[] = {
+        std::array<unsigned int , ibo_size> indices = {
          0,1,2,
          2,3,0
         };
 
-        IndexBuffer ibo(indices, 6 * sizeof(unsigned int));
+        IndexBuffer ibo(indices.data(), indices.size() * sizeof(unsigned int));
 
 
         ShaderProgram program("FirstShader.txt");
@@ -109,19 +110,27 @@ int main(void)
 
         program.Bind();
 
-        float r = 0.0;
-        bool flag = false;
+       // create a texture obj
+       Texture texture(std::string(R"(C:\onedrivenew\Desktop\Rendering\ExternalResources\Cockatiel.png)"));
+       texture.Bind(2);
 
-       int location =  glGetUniformLocation(program.getProgramId(), "u_alpha");
-       
-       if (location == -1)
-       {
-           std::cout << "Location is not valid" << std::endl;
-       }
+       // now u bound the texture u send the slot as in uniform variable
+      int slot_location =  glGetUniformLocation(program.getProgramId(), "u_TexSlot");
 
-       
+      if (slot_location == -1)
+      {
+          std::cout << "Texture Location is not valid" << std::endl;
+      }
+
+
+
 
        Renderer renderer;
+
+       texture.Bind(2);
+       //send the slot to location
+
+       glUniform1i(slot_location, 2);
 
         while (!glfwWindowShouldClose(mainwindow))
         {
@@ -133,36 +142,10 @@ int main(void)
             program.Bind();
             vao.Bind();
             ibo.Bind();
-            
-            glUniform1f(location, r);
+          
+
             renderer.BlendAlpha();
             renderer.Draw(vao, ibo, program);
-
-            if (r <= 1.f)
-            {
-                if (!flag)
-                {
-                    r += 0.005f;
-                }
-                else
-                {
-                    if (r <= 0.f)
-                    {
-                        r = 0.f;
-                        flag = false;
-                    }
-                    else
-                    {
-                        r -= 0.005f;
-                    }
-                }
-            }
-            else
-            {
-                r = 1.f;
-                flag = true;
-            }
-
 
             glfwSwapBuffers(mainwindow);
         }
