@@ -2,25 +2,26 @@
 #version 460 core
 
 
-layout(location = 3) in vec2 Pos;
-layout(location = 4) in vec3 vcolor;
+layout(location = 0) in vec2 Pos;
+layout(location = 1) in vec2 texcoord;
 
-out vec3 fcolor;
+out vec2 v_texcoord;
 
 void main()
 {
    gl_Position = vec4(vec3(Pos,0.f),1.f);
-   fcolor = vcolor;
+   v_texcoord = texcoord;
 }
 
 #shader fragment
 #version 460 core
 
-in vec3 fcolor;
-uniform float u_alpha;
-layout(location = 0)out vec4 Color;
 
+uniform sampler2D u_TexSlot;
+in vec2 v_texcoord;
+layout(location = 0)out vec4 Color;
 void main()
 {
-   Color = vec4(fcolor,u_alpha);
+   Color = texture(u_TexSlot,v_texcoord);
+   
 }
