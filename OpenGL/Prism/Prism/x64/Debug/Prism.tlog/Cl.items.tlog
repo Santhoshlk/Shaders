@@ -3,5 +3,7 @@ D:\Rendering\OpenGL\Prism\Prism\IndexBuffer.cpp;D:\Rendering\OpenGL\Prism\Prism\
 D:\Rendering\OpenGL\Prism\Prism\Main.cpp;D:\Rendering\OpenGL\Prism\Prism\x64\Debug\Main.obj
 D:\Rendering\OpenGL\Prism\Prism\Renderer.cpp;D:\Rendering\OpenGL\Prism\Prism\x64\Debug\Renderer.obj
 D:\Rendering\OpenGL\Prism\Prism\ShaderProgram.cpp;D:\Rendering\OpenGL\Prism\Prism\x64\Debug\ShaderProgram.obj
+D:\Rendering\OpenGL\Prism\Prism\stb_image.cpp;D:\Rendering\OpenGL\Prism\Prism\x64\Debug\stb_image.obj
+D:\Rendering\OpenGL\Prism\Prism\Texture.cpp;D:\Rendering\OpenGL\Prism\Prism\x64\Debug\Texture.obj
 D:\Rendering\OpenGL\Prism\Prism\VertexArray.cpp;D:\Rendering\OpenGL\Prism\Prism\x64\Debug\VertexArray.obj
 D:\Rendering\OpenGL\Prism\Prism\VertexBuffers.cpp;D:\Rendering\OpenGL\Prism\Prism\x64\Debug\VertexBuffers.obj
