@@ -1,12 +1,5 @@
-﻿  BufferLayout.cpp
-  IndexBuffer.cpp
-  Main.cpp
-  Renderer.cpp
-  ShaderProgram.cpp
-  VertexArray.cpp
-D:\Rendering\OpenGL\Prism\Prism\VertexArray.cpp(32,121): warning C4312: 'reinterpret_cast': conversion from 'const unsigned int' to 'const void *' of greater size
-D:\Rendering\OpenGL\Prism\Prism\VertexArray.cpp(32,117): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-  VertexBuffers.cpp
+﻿  Main.cpp
+  Texture.cpp
   Generating Code...
 LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
   Prism.vcxproj -> D:\Rendering\OpenGL\Prism\x64\Debug\Prism.exe

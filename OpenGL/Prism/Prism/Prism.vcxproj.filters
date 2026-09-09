@@ -16,27 +16,39 @@
     <Filter Include="Resource Files\Prism Classes">
       <UniqueIdentifier>{bcfd5c07-cf6a-48a0-ae78-29bf50cb0b05}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\vendor">
+      <UniqueIdentifier>{a4d81143-91c4-4699-a1c7-51e5a7bb87b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\vendor\stb_image">
+      <UniqueIdentifier>{914f12ba-9ee3-438b-b8e6-0b9a5e977d22}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="VertexBuffers.cpp">
       <Filter>Resource Files\Prism Classes</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="IndexBuffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="VertexArray.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="stb_image.cpp">
+      <Filter>Resource Files\vendor\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="BufferLayout.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Resource Files\Prism Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexBuffer.cpp">
+      <Filter>Resource Files\Prism Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Resource Files\Prism Classes</Filter>
     </ClCompile>
     <ClCompile Include="ShaderProgram.cpp">
+      <Filter>Resource Files\Prism Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexArray.cpp">
+      <Filter>Resource Files\Prism Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -62,6 +74,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ShaderProgram.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Resource Files\vendor\stb_image</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

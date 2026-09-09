@@ -13,6 +13,7 @@
 #include "BufferLayout.h" 
 #include "ShaderProgram.h"
 #include "Renderer.h"
+#include "Texture.h"
 
 const unsigned int width = 1000, height = 500;
 
@@ -117,6 +118,8 @@ int main(void)
        {
            std::cout << "Location is not valid" << std::endl;
        }
+
+       
 
        Renderer renderer;
 
