@@ -74,13 +74,13 @@ int main(void)
         // create the vertex array
         VertexArray vao;
 
-        constexpr int v_size = 16;
+        constexpr int v_size =28;
         // the data
         std::array<float,v_size> vertices = {
-          -0.25f,0.f,0.f,0.f,//0
-          0.25f,0.f,1.f,0.f,//1
-          0.25f,1.f,1.f,1.f,//2
-          -0.25,1.f,0.f,1.f//3
+          -0.25f,0.f,0.f,0.f,1.f,0.f,0.f,//0
+          0.25f,0.f,1.f,0.f,0.f,1.f,0.f,//1
+          0.25f,1.f,1.f,1.f,0.f,0.f,1.f,//2
+          -0.25,1.f,0.f,1.f,0.f,1.f,0.f//3
         };
 
         VertexBuffers buffer(vertices.data(), vertices.size() * sizeof(float));
@@ -90,6 +90,7 @@ int main(void)
 
         layout.PushBuffers(0, 2, GL_FLOAT, GL_FALSE, 0);
         layout.PushBuffers(1, 2, GL_FLOAT, GL_FALSE,2*sizeof(float));
+        layout.PushBuffers(2, 3, GL_FLOAT, GL_FALSE, 4 * sizeof(float));
 
 
         vao.Bind();
@@ -110,6 +111,16 @@ int main(void)
 
         program.Bind();
 
+        int location = glGetUniformLocation(program.getProgramId(),"u_alpha");
+
+        if (location == -1)
+        {
+            std::cout << "The Location is not valid" << std::endl;
+        }
+
+        float r = 0;
+        bool flag = false;
+
        // create a texture obj
        Texture texture(std::string(R"(C:\onedrivenew\Desktop\Rendering\ExternalResources\Cockatiel.png)"));
        texture.Bind(2);
@@ -117,10 +128,10 @@ int main(void)
        // now u bound the texture u send the slot as in uniform variable
       int slot_location =  glGetUniformLocation(program.getProgramId(), "u_TexSlot");
 
-      if (slot_location == -1)
-      {
-          std::cout << "Texture Location is not valid" << std::endl;
-      }
+      // if (slot_location == -1)
+      // {
+      //     std::cout << "Texture Location is not valid" << std::endl;
+      // }
 
 
 
@@ -131,20 +142,22 @@ int main(void)
        //send the slot to location
 
        glUniform1i(slot_location, 2);
-
+      ;
         while (!glfwWindowShouldClose(mainwindow))
         {
             // poll for events
             glfwPollEvents();
 
+            glClearColor(1.f, 0.f, 0.f, 1.f);
             renderer.Clear();
+
 
             program.Bind();
             vao.Bind();
             ibo.Bind();
-          
 
             renderer.BlendAlpha();
+            // glUniform1f(location, r);
             renderer.Draw(vao, ibo, program);
 
             glfwSwapBuffers(mainwindow);

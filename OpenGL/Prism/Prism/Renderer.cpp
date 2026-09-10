@@ -6,7 +6,9 @@
 void Renderer::BlendAlpha() const
 {
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    // give blend rgba coffecients
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+    glBlendEquation(GL_ADD);
 }
 
 void Renderer::Draw(const VertexArray& vao, const IndexBuffer& ibo, const ShaderProgram& program) const
