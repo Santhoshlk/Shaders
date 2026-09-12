@@ -3,6 +3,10 @@
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 
+Renderer::Renderer()
+{
+}
+
 void Renderer::BlendAlpha() const
 {
     glEnable(GL_BLEND);

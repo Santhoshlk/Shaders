@@ -17,6 +17,9 @@ public:
     // do the buffer layout for each buffer
 
     VertexArray();
+    
+    VertexArray(const VertexArray& va) = delete;
+    VertexArray& operator=(const VertexArray& va) = delete;
 
     void Bind() const;
     void UnBind() const;

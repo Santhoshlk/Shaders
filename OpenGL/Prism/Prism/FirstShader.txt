@@ -32,6 +32,6 @@ void main()
 {
 
    vec4 texcolor = texture(u_TexSlot,v_texcoord);
-   Color = texcolor;
+   Color = vec4(v_color,1.f);
    
 }
