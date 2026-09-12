@@ -6,12 +6,13 @@ layout(location = 0) in vec2 Pos;
 layout(location = 1) in vec2 texcoord;
 layout(location = 2) in vec3 color;
 
+uniform mat4 u_scale;
 out vec2 v_texcoord;
 out vec3 v_color;
 
 void main()
 {
-   gl_Position = vec4(vec3(Pos,0.f),1.f);
+   gl_Position = u_scale*vec4(vec3(Pos,0.f),1.f);
    v_texcoord = texcoord;
    v_color = color;
 }
@@ -30,16 +31,7 @@ layout(location = 0)out vec4 Color;
 void main()
 {
 
-
    vec4 texcolor = texture(u_TexSlot,v_texcoord);
-
-   if(texcolor.a < 0.1f)
-   {
-     Color = vec4(v_color,0.5f);
-   }
-   else
-   {
-     Color = texcolor;
-   }
+   Color = texcolor;
    
 }

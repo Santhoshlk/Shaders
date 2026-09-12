@@ -1,3 +1,6 @@
+#include <iostream>
+#include <sstream>
+#include <fstream>
 #include "ShaderProgram.h"
 
 unsigned int ShaderProgram::CompileShader(unsigned int ShaderType, const std::string& Shader)
@@ -88,6 +91,61 @@ unsigned int ShaderProgram::CreateShaderProgram(const std::string& VertexShader,
     glDeleteShader(vs);
     glDeleteShader(fs);
     return ProgramId;
+}
+
+void ShaderProgram::SetUniform4f(const std::string& uniform, float f1, float f2, float f3, float f4)
+{
+    auto location = Uniformlocation(uniform);
+    if (location == -1)
+    {
+        std::cout << "The Location is not valid" << std::endl;
+        return;
+    }
+    glUniform4f(location, f1, f2, f3, f4);
+}
+
+void ShaderProgram::SetUnifom1f(const std::string& uniform, float f1)
+{
+    auto location = Uniformlocation(uniform);
+    if (location == -1)
+    {
+        std::cout << "The Location is not valid" << std::endl;
+        return;
+    }
+    glUniform1f(location, f1);
+}
+
+void ShaderProgram::SetUniform1i(const std::string& uniform, int i)
+{
+    auto location = Uniformlocation(uniform);
+    if (location == -1)
+    {
+        std::cout << "The Location is not valid" << std::endl;
+        return;
+    }
+    glUniform1i(location, i);
+}
+
+void ShaderProgram::SetUniformMat4(const std::string& uniform, const glm::mat4& mat)
+{
+    auto location = Uniformlocation(uniform);
+    if (location == -1)
+    {
+        std::cout << "The Location is not valid" << std::endl;
+        return;
+    }
+    glUniformMatrix4fv(location, 1, GL_FALSE, &mat[0][0]);
+}
+
+int ShaderProgram::Uniformlocation(const std::string& uniform)
+{
+    if (!uniformcache.contains(uniform))
+    {
+       int location =  glGetUniformLocation(m_ProgramId, uniform.c_str());
+       uniformcache.insert({uniform,location});
+       return location;
+    }
+    return uniformcache[uniform];
 }
 
 ShaderProgram::ShaderProgram(const std::string& filetoParse)
