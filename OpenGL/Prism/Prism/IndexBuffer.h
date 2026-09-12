@@ -23,7 +23,7 @@ public:
 
 
     // u can get the count so we can pass in the triangles
-    unsigned int GetCount() const;
+     unsigned int GetCount() const;
     ~IndexBuffer();
 
 

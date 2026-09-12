@@ -78,10 +78,10 @@ int main(void)
         constexpr int v_size =28;
         // the data
         std::array<float,v_size> vertices = {
-          -0.25f,0.f,0.f,0.f,1.f,0.f,0.f,//0
-          0.25f,0.f,1.f,0.f,0.f,1.f,0.f,//1
-          0.25f,1.f,1.f,1.f,0.f,0.f,1.f,//2
-          -0.25,1.f,0.f,1.f,0.f,1.f,0.f//3
+          -0.5f,0.f,0.f,0.f,1.f,0.f,0.f,//0
+          0.5f,0.f,1.f,0.f,0.f,1.f,0.f,//1
+          0.5f,1.f,1.f,1.f,0.f,0.f,1.f,//2
+          -0.5,1.f,0.f,1.f,0.f,1.f,0.f//3
         };
 
         VertexBuffers buffer(vertices.data(), vertices.size() * sizeof(float));
@@ -121,6 +121,12 @@ int main(void)
 
 
        glm::mat4 proj = glm::ortho(-2.f,2.f,-1.f,1.f,-1.f,1.f);
+       
+       glm::vec4 vec(2.f, 0.5f, 1.f, 1.f);
+       vec = proj * vec;
+
+       std::cout << vec.x << ',' << vec.y << "," << vec.z << "," << std::endl;
+    
        texture.Bind(2);
 
        program.SetUniform1i("u_TexSlot",2);
