@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <cstring>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <cassert>
@@ -13,6 +12,8 @@
 #include "ShaderProgram.h"
 #include "Renderer.h"
 #include "Texture.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
 const unsigned int width = 1500, height = 750;
 
@@ -111,44 +112,26 @@ int main(void)
 
         program.Bind();
 
-        int location = glGetUniformLocation(program.getProgramId(),"u_alpha");
-
-        if (location == -1)
-        {
-            std::cout << "The Location is not valid" << std::endl;
-        }
-
-        float r = 0;
-        bool flag = false;
 
        // create a texture obj
        Texture texture(std::string(R"(C:\onedrivenew\Desktop\Rendering\ExternalResources\Cockatiel.png)"));
        texture.Bind(2);
 
-       // now u bound the texture u send the slot as in uniform variable
-      int slot_location =  glGetUniformLocation(program.getProgramId(), "u_TexSlot");
-
-      // if (slot_location == -1)
-      // {
-      //     std::cout << "Texture Location is not valid" << std::endl;
-      // }
-
-
-
-
        Renderer renderer;
 
-       texture.Bind(2);
-       //send the slot to location
 
-       glUniform1i(slot_location, 2);
-      ;
+       glm::mat4 proj = glm::ortho(-2.f,2.f,-1.f,1.f,-1.f,1.f);
+       texture.Bind(2);
+
+       program.SetUniform1i("u_TexSlot",2);
+
+       program.SetUniformMat4("u_scale", proj);
         while (!glfwWindowShouldClose(mainwindow))
         {
             // poll for events
             glfwPollEvents();
 
-            glClearColor(1.f, 0.f, 0.f, 1.f);
+          
             renderer.Clear();
 
 
@@ -157,13 +140,12 @@ int main(void)
             ibo.Bind();
 
             renderer.BlendAlpha();
-            // glUniform1f(location, r);
             renderer.Draw(vao, ibo, program);
 
             glfwSwapBuffers(mainwindow);
         }
     }
-    // when its done remove glfw completely
+  
     glfwTerminate();
-    // done
+  
 }

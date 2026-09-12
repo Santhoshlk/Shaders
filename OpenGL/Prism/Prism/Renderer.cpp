@@ -7,7 +7,7 @@ void Renderer::BlendAlpha() const
 {
     glEnable(GL_BLEND);
     // give blend rgba coffecients
-    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc(GL_SRC_ALPHA,GL_DST_ALPHA );
     glBlendEquation(GL_ADD);
 }
 
