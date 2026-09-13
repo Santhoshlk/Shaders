@@ -75,6 +75,9 @@
     <ClCompile Include="Vendor\ImGUI\Backend\imgui_impl_opengl3.cpp">
       <Filter>Resource Files\vendor\ImGUI</Filter>
     </ClCompile>
+    <ClCompile Include="Vendor\ImGUI\Backend\ImGUI_GLFW_Setup_Example.cpp">
+      <Filter>Resource Files\vendor\ImGUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="FirstShader.txt">
