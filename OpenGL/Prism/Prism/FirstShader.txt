@@ -6,13 +6,13 @@ layout(location = 0) in vec2 Pos;
 layout(location = 1) in vec2 texcoord;
 layout(location = 2) in vec3 color;
 
-uniform mat4 u_scale;
+uniform mat4 u_mvp;
 out vec2 v_texcoord;
 out vec3 v_color;
 
 void main()
 {
-   gl_Position = u_scale*vec4(vec3(Pos,0.f),1.f);
+   gl_Position = u_mvp*vec4(vec3(Pos,0.f),1.f);
    v_texcoord = texcoord;
    v_color = color;
 }
