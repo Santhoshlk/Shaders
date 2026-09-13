@@ -111,7 +111,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>D:\ExternalLibraries\GLEW\include;D:\ExternalLibraries\GLFW\include;D:\ExternalLibraries\GLMlibrary;$(ProjectDir)Vendor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\ExternalLibraries\GLEW\include;D:\ExternalLibraries\GLFW\include;D:\ExternalLibraries\GLMlibrary;$(ProjectDir)Vendor;$(ProjectDir)Vendor/ImGUI;$(ProjectDir)Vendor/ImGUI/Backend;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -149,6 +149,13 @@
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Vendor\ImGUI\Backend\imgui_impl_glfw.cpp" />
+    <ClCompile Include="Vendor\ImGUI\Backend\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="Vendor\ImGUI\imgui.cpp" />
+    <ClCompile Include="Vendor\ImGUI\imgui_demo.cpp" />
+    <ClCompile Include="Vendor\ImGUI\imgui_draw.cpp" />
+    <ClCompile Include="Vendor\ImGUI\imgui_tables.cpp" />
+    <ClCompile Include="Vendor\ImGUI\imgui_widgets.cpp" />
     <ClCompile Include="VertexArray.cpp" />
     <ClCompile Include="VertexBuffers.cpp" />
   </ItemGroup>
