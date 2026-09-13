@@ -304,6 +304,11 @@
             "d:\\externallibraries\\glmlibrary\\glm\\integer.hpp",
             "d:\\externallibraries\\glmlibrary\\glm\\detail\\func_integer.inl",
             "d:\\rendering\\opengl\\prism\\prism\\texture.h",
+            "d:\\rendering\\opengl\\prism\\prism\\vendor\\imgui\\backend\\imgui_impl_opengl3.h",
+            "d:\\rendering\\opengl\\prism\\prism\\vendor\\imgui\\imgui.h",
+            "d:\\rendering\\opengl\\prism\\prism\\vendor\\imgui\\imconfig.h",
+            "c:\\program files\\microsoft visual studio\\18\\community\\vc\\tools\\msvc\\14.51.36231\\include\\stdarg.h",
+            "c:\\program files (x86)\\windows kits\\10\\include\\10.0.26100.0\\ucrt\\assert.h",
             "d:\\externallibraries\\glmlibrary\\glm\\gtc\\matrix_transform.hpp",
             "d:\\externallibraries\\glmlibrary\\glm\\ext\\matrix_projection.hpp",
             "d:\\externallibraries\\glmlibrary\\glm\\gtc\\constants.hpp",
@@ -316,7 +321,8 @@
             "d:\\externallibraries\\glmlibrary\\glm\\ext\\matrix_clip_space.inl",
             "d:\\externallibraries\\glmlibrary\\glm\\ext\\matrix_transform.hpp",
             "d:\\externallibraries\\glmlibrary\\glm\\ext\\matrix_transform.inl",
-            "d:\\externallibraries\\glmlibrary\\glm\\gtc\\matrix_transform.inl"
+            "d:\\externallibraries\\glmlibrary\\glm\\gtc\\matrix_transform.inl",
+            "d:\\rendering\\opengl\\prism\\prism\\vendor\\imgui\\backend\\imgui_impl_glfw.h"
         ],
         "ImportedModules": [],
         "ImportedHeaderUnits": []

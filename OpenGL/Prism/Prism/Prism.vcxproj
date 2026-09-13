@@ -149,6 +149,9 @@
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="stb_image.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Vendor\ImGUI\Backend\ImGUI_GLFW_Setup_Example.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Vendor\ImGUI\Backend\imgui_impl_glfw.cpp" />
     <ClCompile Include="Vendor\ImGUI\Backend\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Vendor\ImGUI\imgui.cpp" />
