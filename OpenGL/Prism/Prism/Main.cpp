@@ -122,16 +122,18 @@ int main(void)
 
        glm::mat4 proj = glm::ortho(-2.f,2.f,-1.f,1.f,-1.f,1.f);
        
-       glm::vec4 vec(2.f, 0.5f, 1.f, 1.f);
-       vec = proj * vec;
+       glm::mat4 view = glm::translate(glm::mat4(1.0f),glm::vec3(-0.5f,0.f,0.f));
 
-       std::cout << vec.x << ',' << vec.y << "," << vec.z << "," << std::endl;
+       glm::mat4 model = glm::translate(glm::mat4(1.f),glm::vec3(0.5f,-0.25,0.f));
+       glm::mat4 mvp = proj * view * model;
+
+      
     
        texture.Bind(2);
 
        program.SetUniform1i("u_TexSlot",2);
 
-       program.SetUniformMat4("u_scale", proj);
+       program.SetUniformMat4("u_mvp", mvp);
         while (!glfwWindowShouldClose(mainwindow))
         {
             // poll for events
