@@ -15,12 +15,16 @@
 
 
 //**External Linked Libs Start**//
-#include <imgui_impl_opengl3.h>
 
+//~Begin Interface glm
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+//~End Interface glm
+
+//~Begin Interface ImGui
 #include "ImGUI/imgui.h"
-#include "ImGUI/Backend/imgui_impl_glfw.h"
+#include "ImGuI/Backend/imgui_impl_glfw.h"
+#include "ImGUi/Backend/imgui_impl_opengl3.h"
 //**External Linked Libs End**//
 
 
@@ -31,6 +35,14 @@ GLFWwindow* mainwindow = nullptr;
 int bufferwidth, bufferheight;
 
 unsigned int VBO, VAO, IBO;
+
+//** ImGui GLOBAL CONSTANTS**//
+float font_size = 1.5f;
+float elements_size = 1.5f;
+//** End **//
+
+
+
 
 int main(void)
 {
@@ -129,27 +141,6 @@ int main(void)
        Renderer renderer;
 
 
-       //Dear ImGuI Setup
-         // Setup Dear ImGui context
-       const char* glsl_version = "#version 460 core";
-       IMGUI_CHECKVERSION();
-       ImGui::CreateContext();
-       ImGuiIO& io = ImGui::GetIO(); (void)io;
-       io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-       io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad; 
-    
-       ImGui_ImplGlfw_InitForOpenGL(mainwindow, true);
-       ImGui_ImplOpenGL3_Init(glsl_version);
-
-       // Setup Dear ImGui style
-       ImGui::StyleColorsDark();
-
-
-      //ImGUI bools
-       bool show_demo_window = true;
-       bool show_another_window = false;
-       ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
      
        glm::mat4 proj = glm::ortho(-2.f,2.f,-1.f,1.f,-1.f,1.f);
        
@@ -163,19 +154,34 @@ int main(void)
        texture.Bind(2);
 
        program.SetUniform1i("u_TexSlot",2);
-
        program.SetUniformMat4("u_mvp", mvp);
+
+
+       //Dear ImGui Setup
+       IMGUI_CHECKVERSION();
+       ImGui::CreateContext();
+      ImGuiIO & io = ImGui::GetIO();
+
+      // actual style 
+      ImGuiStyle& Style =  ImGui::GetStyle();
+      Style.ScaleAllSizes(elements_size);
+      Style.FontScaleMain = font_size;
+
+
+      ImGui::StyleColorsDark();
+
+
+     // actual window initialization
+      ImGui_ImplGlfw_InitForOpenGL(mainwindow, true);
+      const char* glsl_version = "#version 460 core";
+      ImGui_ImplOpenGL3_Init(glsl_version);
+
+
         while (!glfwWindowShouldClose(mainwindow))
         {
             // poll for events
             glfwPollEvents();
             renderer.Clear();
-
-            //ImGUI Frame
-            ImGui_ImplOpenGL3_NewFrame();
-            ImGui_ImplGlfw_NewFrame();
-            ImGui::NewFrame();
-
             program.Bind();
             vao.Bind();
             ibo.Bind();
@@ -183,44 +189,29 @@ int main(void)
             renderer.BlendAlpha();
             renderer.Draw(vao, ibo, program);
 
-            //ImGUI Window Render
+            //frame creation
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
+
+
+             // window creation with static inits
             {
-                static float f = 0.0f;
-                static int counter = 0;
-
-                ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-                ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-                ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-                ImGui::Checkbox("Another Window", &show_another_window);
-
-                ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-                ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-                if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                    counter++;
-                ImGui::SameLine();
-                ImGui::Text("counter = %d", counter);
-
-                ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+                ImGui::Begin("My new custom Window");
                 ImGui::End();
             }
 
-
-
-
-            //ImGUI Render
             ImGui::Render();
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+          
 
             glfwSwapBuffers(mainwindow);
         }
     }
-    //ImGUI Cleanup
+    // cleanup 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
-     
     glfwTerminate();
   
 }
