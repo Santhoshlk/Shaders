@@ -148,6 +148,8 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="stb_image.cpp" />
+    <ClCompile Include="Test.cpp" />
+    <ClCompile Include="TestClearColor.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Vendor\ImGUI\Backend\ImGUI_GLFW_Setup_Example.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -171,6 +173,8 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Test.h" />
+    <ClInclude Include="TestClearColor.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="VertexArray.h" />
     <ClInclude Include="VertexBuffers.h" />

@@ -28,6 +28,7 @@ Texture::Texture(const std::string& filepath) : m_filepath(filepath)
 
    // now give the data to gpu and free the local copy for now 
    glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA8,m_Width,m_Height,0,GL_RGBA,GL_UNSIGNED_BYTE,m_Buffer);
+   
 
    if (m_Buffer)
    {
@@ -39,7 +40,7 @@ Texture::Texture(const std::string& filepath) : m_filepath(filepath)
 
 void Texture::Bind(unsigned int slot) const
 {
-   assert("slot are only allowed upto 31" && slot < 32);
+   assert("slot are only allowed upto 31" && slot < 32 && slot >= 0 );
    glActiveTexture(GL_TEXTURE0 + slot);
    glBindTexture(GL_TEXTURE_2D, m_RendererId);
 }
