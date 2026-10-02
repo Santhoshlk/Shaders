@@ -25,6 +25,9 @@
     <Filter Include="Resource Files\vendor\ImGUI">
       <UniqueIdentifier>{ebb22661-8558-4597-99cc-74c34b4df083}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Test Classes">
+      <UniqueIdentifier>{22ec1726-3024-4c7f-9813-6770751bae23}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="VertexBuffers.cpp">
@@ -78,6 +81,12 @@
     <ClCompile Include="Vendor\ImGUI\Backend\ImGUI_GLFW_Setup_Example.cpp">
       <Filter>Resource Files\vendor\ImGUI</Filter>
     </ClCompile>
+    <ClCompile Include="Test.cpp">
+      <Filter>Resource Files\Test Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="TestClearColor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="FirstShader.txt">
@@ -107,6 +116,12 @@
       <Filter>Resource Files\vendor\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestClearColor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

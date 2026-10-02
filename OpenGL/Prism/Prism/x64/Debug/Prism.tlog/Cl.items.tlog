@@ -4,6 +4,8 @@ D:\Rendering\OpenGL\Prism\Prism\Main.cpp;D:\Rendering\OpenGL\Prism\Prism\x64\Deb
 D:\Rendering\OpenGL\Prism\Prism\Renderer.cpp;D:\Rendering\OpenGL\Prism\Prism\x64\Debug\Renderer.obj
 D:\Rendering\OpenGL\Prism\Prism\ShaderProgram.cpp;D:\Rendering\OpenGL\Prism\Prism\x64\Debug\ShaderProgram.obj
 D:\Rendering\OpenGL\Prism\Prism\stb_image.cpp;D:\Rendering\OpenGL\Prism\Prism\x64\Debug\stb_image.obj
+D:\Rendering\OpenGL\Prism\Prism\Test.cpp;D:\Rendering\OpenGL\Prism\Prism\x64\Debug\Test.obj
+D:\Rendering\OpenGL\Prism\Prism\TestClearColor.cpp;D:\Rendering\OpenGL\Prism\Prism\x64\Debug\TestClearColor.obj
 D:\Rendering\OpenGL\Prism\Prism\Texture.cpp;D:\Rendering\OpenGL\Prism\Prism\x64\Debug\Texture.obj
 D:\Rendering\OpenGL\Prism\Prism\Vendor\ImGUI\Backend\imgui_impl_glfw.cpp;D:\Rendering\OpenGL\Prism\Prism\x64\Debug\imgui_impl_glfw.obj
 D:\Rendering\OpenGL\Prism\Prism\Vendor\ImGUI\Backend\imgui_impl_opengl3.cpp;D:\Rendering\OpenGL\Prism\Prism\x64\Debug\imgui_impl_opengl3.obj
