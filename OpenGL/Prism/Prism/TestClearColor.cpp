@@ -1,8 +1,6 @@
 #include "TestClearColor.h"
 
 #include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
 #include <GL/glew.h>
 
 
@@ -25,17 +23,17 @@ void Test::TestClearColor::OnRender()
 
 void Test::TestClearColor::OnImGuiRender()
 {
-    ImGui::Begin("Test Clear Color");
 
     ImGui::ColorPicker4("Color Picker",color,ImGuiColorEditFlags_AlphaBar);
-
-    ImGui::End();
-
-
 
 }
 
 Test::TestClearColor::~TestClearColor()
 {
-
+    for (auto& i : color)
+    {
+        i = 0.f;
+    }
+    glClearColor(0.f,0.f,0.f,0.f);
+    glClear(GL_COLOR_BUFFER_BIT);
 }

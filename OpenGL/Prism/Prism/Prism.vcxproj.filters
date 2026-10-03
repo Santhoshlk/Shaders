@@ -87,6 +87,9 @@
     <ClCompile Include="TestClearColor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TestMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="FirstShader.txt">
@@ -122,6 +125,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TestClearColor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
