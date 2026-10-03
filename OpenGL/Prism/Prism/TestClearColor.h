@@ -10,11 +10,12 @@ namespace Test
     public:
         TestClearColor();
 
+
         void OnUpdate() override;
         void OnRender() override;
         void OnImGuiRender() override;
 
-        ~TestClearColor();
+       virtual ~TestClearColor();
 
 
     };

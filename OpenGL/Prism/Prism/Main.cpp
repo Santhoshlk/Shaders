@@ -13,6 +13,7 @@
 #include "Renderer.h"
 #include "Texture.h"
 #include "TestClearColor.h"
+#include "TestMenu.h"
 
 
 //**External Linked Libs Start**//
@@ -179,8 +180,15 @@ int main(void)
 
        program.SetUniform1i("u_TexSlot",2);
    
-       Test::TestClearColor ClearColorTest;
-    
+       
+       Test::Test* CurrentTest = nullptr;
+
+       Test::TestMenu* TestMenu = new Test::TestMenu(CurrentTest);
+
+
+      // so u have to register
+       TestMenu->RegisterTests<Test::TestClearColor>("Clear_Color");
+
 
         while (!glfwWindowShouldClose(mainwindow))
         {
@@ -190,8 +198,34 @@ int main(void)
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();
             ImGui::NewFrame();
-            ClearColorTest.OnRender();
-            ClearColorTest.OnImGuiRender();
+            renderer.Clear();
+           
+            {
+                static bool showWindow = true;
+
+                if (showWindow)
+                {
+                    ImGui::Begin("Test Menu Window", &showWindow);
+                    
+                    // pressing of all buttons check if its on test menu
+                    if (CurrentTest)
+                    {
+                        CurrentTest->OnUpdate();
+                        CurrentTest->OnRender();
+                        CurrentTest->OnImGuiRender();
+                    }
+                    
+                    if (CurrentTest!= TestMenu && ImGui::Button("Back"))
+                    {
+                        delete CurrentTest;
+                        CurrentTest = TestMenu;
+                    }
+
+                    ImGui::End();
+                }
+
+
+            }
 
 
             ImGui::Render();
