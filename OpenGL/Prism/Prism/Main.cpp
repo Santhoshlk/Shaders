@@ -104,139 +104,75 @@ int main(void)
     // now create the viewport
     glViewport(0, 0, bufferwidth, bufferheight);
     {
-        // create the vertex array
+        // Batch Rendering test
         VertexArray vao;
 
-        constexpr int v_size =28;
-        // the data
-        std::array<float,v_size> vertices = {
-          -0.5f,0.f,0.f,0.f,1.f,0.f,0.f,//0
-          0.5f,0.f,1.f,0.f,0.f,1.f,0.f,//1
-          0.5f,1.f,1.f,1.f,0.f,0.f,1.f,//2
-          -0.5,1.f,0.f,1.f,0.f,1.f,0.f//3
+        // get the data
+        std::array<float,16> vertices = {
+            // quad 1 (left)
+            -1.8f, -0.7f,
+            -0.4f, -0.7f,
+            -0.4f,  0.7f,
+            -1.8f,  0.7f,
+
+            // quad 2 (right)
+             0.4f, -0.7f,
+             1.8f, -0.7f,
+             1.8f,  0.7f,
+             0.4f,  0.7f
         };
 
-        VertexBuffers buffer(vertices.data(), vertices.size() * sizeof(float));
+        VertexBuffers vbo(vertices.data(),vertices.size() * sizeof(float));
+
+         // now u need to tell the layout
 
         BufferLayout layout;
+ 
+        layout.PushBuffers(0,2,GL_FLOAT,false,0);
 
+        vao.addBuffer(vbo,layout);
 
-        layout.PushBuffers(0, 2, GL_FLOAT, GL_FALSE, 0);
-        layout.PushBuffers(1, 2, GL_FLOAT, GL_FALSE,2*sizeof(float));
-        layout.PushBuffers(2, 3, GL_FLOAT, GL_FALSE, 4 * sizeof(float));
-
-
-        vao.Bind();
-        vao.addBuffer(buffer, layout);
-
-        constexpr int ibo_size = 6;
-        // the actual array data
-        std::array<unsigned int , ibo_size> indices = {
-         0,1,2,
-         2,3,0
+        std::array<unsigned int,12> indices = {
+            0,1,2,
+            2,3,0,
+            4,5,6,
+            6,7,4
         };
 
+
+        // do the ibo
         IndexBuffer ibo(indices.data(), indices.size() * sizeof(unsigned int));
 
+        //Create the program
+        ShaderProgram program("BatchRendering.txt");
 
-        ShaderProgram program("FirstShader.txt");
+        Renderer renderer;
 
-
-        program.Bind();
-
-
-       // create a texture obj
-       Texture texture(std::string(R"(C:\onedrivenew\Desktop\Rendering\ExternalResources\Cockatiel.png)"));
-       texture.Bind(2);
-
-       Renderer renderer;
+        glm::mat4 proj = glm::ortho(-2.f, 2.f, -1.f, 1.f, -1.f, 1.f);
+        glm::mat4 mvp = proj;
 
 
-     
-       glm::mat4 proj = glm::ortho(-8.f,8.f,-4.f,4.f,-1.f,1.f);
-       
-       glm::mat4 view = glm::translate(glm::mat4(1.0f),glm::vec3(-0.5f,0.f,0.f));
-
-       glm::mat4 model = glm::translate(glm::mat4(1.f),glm::vec3(0.5f,-0.25,0.f));
-       glm::mat4 mvp = proj * view * model;
-
-      //ImGuiSetup
-       IMGUI_CHECKVERSION();
-       ImGui::CreateContext();
-       ImGuiStyle& Style =ImGui::GetStyle();
-       Style.ScaleAllSizes(elements_size);
-       Style.FontScaleMain = font_size;
-
-       ImGuiIO& Io =  ImGui::GetIO();
-
-        //no need of io
-       ImGui_ImplGlfw_InitForOpenGL(mainwindow, true);
-       const char* glsl = "#version 460 core";
-       ImGui_ImplOpenGL3_Init(glsl);
-
-
-
-       texture.Bind(2);
-
-       program.SetUniform1i("u_TexSlot",2);
-   
-       
-       Test::Test* CurrentTest = nullptr;
-
-       Test::TestMenu* TestMenu = new Test::TestMenu(CurrentTest);
-
-
-      // so u have to register
-       TestMenu->RegisterTests<Test::TestClearColor>("Clear_Color");
-
+        program.SetUniformMat4("u_mvp",mvp);
 
         while (!glfwWindowShouldClose(mainwindow))
         {
             // poll for events
             glfwPollEvents();
-
-            ImGui_ImplOpenGL3_NewFrame();
-            ImGui_ImplGlfw_NewFrame();
-            ImGui::NewFrame();
             renderer.Clear();
+
            
-            {
-                static bool showWindow = true;
+            renderer.Draw(vao,ibo,program);
 
-                if (showWindow)
-                {
-                    ImGui::Begin("Test Menu Window", &showWindow);
-                    
-                    // pressing of all buttons check if its on test menu
-                    if (CurrentTest)
-                    {
-                        CurrentTest->OnUpdate();
-                        CurrentTest->OnRender();
-                        CurrentTest->OnImGuiRender();
-                    }
-                    
-                    if (CurrentTest!= TestMenu && ImGui::Button("Back"))
-                    {
-                        delete CurrentTest;
-                        CurrentTest = TestMenu;
-                    }
-
-                    ImGui::End();
-                }
-
-
-            }
-
-
-            ImGui::Render();
-            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+            //
+            // ImGui::Render();
+            // ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
             glfwSwapBuffers(mainwindow);
         }
     }
-    // cleanup 
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
+    // // cleanup 
+    // ImGui_ImplOpenGL3_Shutdown();
+    // ImGui_ImplGlfw_Shutdown();
+    // ImGui::DestroyContext();
     glfwTerminate();
   
 }

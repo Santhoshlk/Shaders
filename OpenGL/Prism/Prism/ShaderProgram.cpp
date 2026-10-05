@@ -152,6 +152,8 @@ ShaderProgram::ShaderProgram(const std::string& filetoParse)
 {
     Shaders source = ParseFile(filetoParse);
     m_ProgramId = CreateShaderProgram(source.vs, source.fs);
+
+    Bind();
 }
 
 

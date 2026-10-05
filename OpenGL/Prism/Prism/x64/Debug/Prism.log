@@ -1,4 +1,4 @@
 ﻿  Main.cpp
-D:\Rendering\OpenGL\Prism\Prism\Main.cpp(119,63): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
-D:\Rendering\OpenGL\Prism\Prism\Main.cpp(139,56): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+D:\Rendering\OpenGL\Prism\Prism\Main.cpp(125,59): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
+D:\Rendering\OpenGL\Prism\Prism\Main.cpp(144,56): warning C4267: 'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
   Prism.vcxproj -> D:\Rendering\OpenGL\Prism\x64\Debug\Prism.exe

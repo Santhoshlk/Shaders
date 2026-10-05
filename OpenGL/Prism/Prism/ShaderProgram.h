@@ -24,7 +24,7 @@ Shaders ParseFile(const std::string& infile);
 
 
 
-class ShaderProgram
+class   ShaderProgram
 {
 private:
  // the shader program should contain a storage for all th uniform location it has
