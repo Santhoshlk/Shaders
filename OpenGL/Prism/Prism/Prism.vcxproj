@@ -166,6 +166,7 @@
     <ClCompile Include="VertexBuffers.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="BatchRendering.txt" />
     <Text Include="FirstShader.txt" />
   </ItemGroup>
   <ItemGroup>
