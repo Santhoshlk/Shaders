@@ -143,6 +143,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BufferLayout.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -151,6 +152,7 @@
     <ClCompile Include="Test.cpp" />
     <ClCompile Include="TestClearColor.cpp" />
     <ClCompile Include="TestMenu.cpp" />
+    <ClCompile Include="TestTexture2D.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Vendor\ImGUI\Backend\ImGUI_GLFW_Setup_Example.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -171,6 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BufferLayout.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ShaderProgram.h" />
@@ -178,6 +181,7 @@
     <ClInclude Include="Test.h" />
     <ClInclude Include="TestClearColor.h" />
     <ClInclude Include="TestMenu.h" />
+    <ClInclude Include="TestTexture2D.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="VertexArray.h" />
     <ClInclude Include="VertexBuffers.h" />

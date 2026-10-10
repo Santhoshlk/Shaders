@@ -1,0 +1,13 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "d:\\rendering\\opengl\\prism\\prism\\testtexture2d.cpp",
+        "ProvidedModule": "",
+        "Includes": [
+            "d:\\rendering\\opengl\\prism\\prism\\testtexture2d.h",
+            "d:\\rendering\\opengl\\prism\\prism\\test.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}
