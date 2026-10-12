@@ -40,6 +40,9 @@ int bufferwidth, bufferheight;
 
 unsigned int VBO, VAO, IBO;
 
+
+float now = 0.f, deltatime = 0.f, lasttime =0.f;
+
 //** ImGui GLOBAL CONSTANTS**//
 float font_size = 1.5f;
 float elements_size = 1.5f;
@@ -208,6 +211,10 @@ int main(void)
 
         while (!glfwWindowShouldClose(mainwindow))
         {
+            now = glfwGetTime();
+            deltatime = now - lasttime;
+            lasttime = now;
+
             // poll for events
             glfwPollEvents();
             renderer.Clear();

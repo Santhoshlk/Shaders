@@ -1,5 +1,8 @@
+// ReSharper disable All
 #pragma once
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 
 class Camera
@@ -8,11 +11,27 @@ private:
     GLFWwindow*& Currentwindow;
     bool Keys[1024] = { false };
 
+    // ReSharper disable once IdentifierTypo
     double lastxpos;
     double lastypos;
     double xchange;
     double ychange;
     bool  bfirstmovement = true;
+
+
+    // elements of camera 
+    glm::vec3 Cameraposition;
+    glm::vec3 front;
+    glm::vec3 up;
+    glm::vec3 right;
+    glm::vec3 worldup = glm::vec3(0.f,1.f,0.f);
+
+    double yaw;
+    double pitch;
+
+    float movementspeed;
+    float turnspeed;
+
 
 
 public:
@@ -26,7 +45,13 @@ public:
 
     static void CursorCallback(GLFWwindow* window, double xpos, double ypos);
 
+    void InitializeCamera(glm::vec3 position, glm::vec3 front, float movementspeed, float turnspeed, double yaw, double pitch);
 
+    void Update();
+
+    void HandleCursor(double xchange, double ychange);
+
+    void HandleKeys(float deltatime);
 
     void RemoveCallbacks();
 

@@ -1,5 +1,7 @@
+// ReSharper disable All
 #include "Camera.h"
 #include <iostream>
+#include <algorithm>
 
 Camera::Camera(GLFWwindow*& currentwindow) : Currentwindow(currentwindow)
 {
@@ -25,12 +27,12 @@ void Camera::KeyCallback(GLFWwindow* window, int key, int scancode, int action, 
     {
         if (action == GLFW_PRESS && !camera->Keys[key])
         {
-            std::cout << "Pressed Key :" <<key<< std::endl;
+          
             camera->Keys[key] = true;
         }
         else if (action == GLFW_RELEASE && camera->Keys[key])
         {
-            std::cout << "Released Key :" <<key<<std::endl;
+           
             camera->Keys[key] = false;
         }
 
@@ -63,7 +65,71 @@ void Camera::CursorCallback(GLFWwindow* window, double xpos, double ypos)
     camera->lastxpos = xpos;
     camera->lastypos = ypos;
 
-    std::cout << "X change :" << camera->xchange << " Y Change :" << camera->ychange << std::endl;
+}
+
+void Camera::InitializeCamera(glm::vec3 position, glm::vec3 front,float movementspeed,float turnspeed,double yaw,double pitch)
+    
+{
+    this->Cameraposition = position;
+    this->front = front;
+    this->movementspeed = movementspeed;
+    this->pitch = pitch;
+    this->yaw = yaw;
+    this->turnspeed = turnspeed;
+}
+
+void Camera::Update()
+{
+
+    front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    front.y = sin(glm::radians(pitch));
+    front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+
+    right = glm::normalize(glm::cross(front,worldup));
+    up = glm::normalize(glm::cross(right,front));
+
+
+
+}
+
+void Camera::HandleCursor(double xchange, double ychange)
+{
+    yaw += xchange * static_cast<double>(turnspeed);
+    pitch += ychange * static_cast<double>(turnspeed);
+
+    pitch = std::clamp(pitch, -90.0, 90.0);
+    Update();
+}
+
+void Camera::HandleKeys(float deltatime)
+{
+
+    Update();
+
+    // next u write the logic to handle keys
+    // in opengl front is z right is x and up is y
+    if (Keys[GLFW_KEY_W])
+    {
+        float dist = movementspeed * deltatime;
+        Cameraposition += front * dist;
+    }
+    if (Keys[GLFW_KEY_S])
+    {
+        float dist = movementspeed * deltatime;
+        Cameraposition -= front * dist;
+    }
+    if (Keys[GLFW_KEY_A])
+    {
+        float dist = movementspeed * deltatime;
+        Cameraposition -= right * dist;
+    }
+    if (Keys[GLFW_KEY_D])
+    {
+        float dist = movementspeed * deltatime;
+        Cameraposition += right * dist;
+        
+    }
+
 }
 
 void Camera::RemoveCallbacks()
@@ -74,6 +140,6 @@ void Camera::RemoveCallbacks()
 
 Camera::~Camera()
 {
-    glfwSetKeyCallback(Currentwindow, nullptr);
+    RemoveCallbacks();
     // dont set ptr to null
 }
