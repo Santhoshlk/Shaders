@@ -48,6 +48,7 @@ float elements_size = 1.5f;
 
 
 
+
 void Print(const std::string& Message)
 {
     // using imgui
@@ -155,34 +156,40 @@ int main(void)
         // u can create ur translate etc
         glm::mat4 r(1.f);
 
-        r = glm::rotate(r,glm::radians(90.f), glm::vec3(1.f, 0.f, 0.f));
+        r = glm::rotate(r,glm::radians(45.f), glm::vec3(1.f, 1.f, 0.f));
 
         glm::mat4 t(1.f);
 
-        t = glm::translate(t, glm::vec3(2.f,0.f,0.f));
+        t = glm::translate(t, glm::vec3(0.25f,0.f,0.f));
 
         glm::mat4 model = t * r;
 
-        glm::mat4 proj = glm::ortho(-2.f,2.f,-1.f,1.f,-1.f,1.f);
+        glm::mat4 proj = glm::ortho(-4.f,4.f,-2.f,2.f,0.1f,100.f);
 
-        shader.SetUniformMat4("u_mvp", proj * model);
-
-
-        
-
+        camera.InitializeCamera(glm::vec3(0.f, 0.f, 3.f), glm::vec3(0.f, 0.f, -1.f), 5.f, 0.25f, 90.f, 0.f);
 
 
         Renderer renderer;
 
         while (!glfwWindowShouldClose(mainwindow))
         {
+            now = glfwGetTime();
+            deltatime = now - lasttime;
             glfwPollEvents();
             
             renderer.Clear();
             //Do the actual rendering here
+            // update the camera turn and movement here
+            camera.HandleCursor();
+            camera.HandleKeys(deltatime);
+          
+            glm::mat4 view = camera.GetViewMatrix();
+            shader.SetUniformMat4("u_mvp",proj*view);
 
             renderer.Draw(vao,ibo,shader);
+            lasttime = now;
 
+            
             glfwSwapBuffers(mainwindow);
         }
         

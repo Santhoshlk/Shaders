@@ -49,7 +49,9 @@ public:
 
     void Update();
 
-    void HandleCursor(double xchange, double ychange);
+    glm::mat4 GetViewMatrix();
+
+    void HandleCursor();
 
     void HandleKeys(float deltatime);
 
