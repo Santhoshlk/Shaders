@@ -46,58 +46,59 @@ void Camera::KeyCallback(GLFWwindow* window, int key, int scancode, int action, 
 
 void Camera::CursorCallback(GLFWwindow* window, double xpos, double ypos)
 {
-    // u need the camera
     Camera* camera = static_cast<Camera*>(glfwGetWindowUserPointer(window));
-
+    
     if (camera->bfirstmovement)
     {
         camera->lastxpos = xpos;
         camera->lastypos = ypos;
-
         camera->bfirstmovement = false;
-
     }
 
+    // find the changes
 
     camera->xchange = xpos - camera->lastxpos;
     camera->ychange = ypos - camera->lastypos;
 
     camera->lastxpos = xpos;
     camera->lastypos = ypos;
-
 }
 
-void Camera::InitializeCamera(glm::vec3 position, glm::vec3 front,float movementspeed,float turnspeed,double yaw,double pitch)
-    
+void Camera::InitializeCamera(glm::vec3 position, glm::vec3 front, float movementspeed, float turnspeed, double yaw, double pitch)
 {
     this->Cameraposition = position;
     this->front = front;
     this->movementspeed = movementspeed;
-    this->pitch = pitch;
-    this->yaw = yaw;
     this->turnspeed = turnspeed;
+    this->yaw = yaw;
+    this->pitch = pitch;
 }
-
 void Camera::Update()
 {
-
     front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
     front.y = sin(glm::radians(pitch));
     front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 
-    right = glm::normalize(glm::cross(front,worldup));
-    up = glm::normalize(glm::cross(right,front));
-
-
-
+    right= glm::normalize(glm::cross(front, worldup));
+    up = glm::normalize(glm::cross(right, front));
+    
 }
 
-void Camera::HandleCursor(double xchange, double ychange)
+glm::mat4 Camera::GetViewMatrix()
+{
+    return glm::lookAt(Cameraposition, Cameraposition + front, up);
+}
+
+void Camera::HandleCursor()
 {
     yaw += xchange * static_cast<double>(turnspeed);
     pitch += ychange * static_cast<double>(turnspeed);
 
-    pitch = std::clamp(pitch, -90.0, 90.0);
+    xchange = 0.0;
+    ychange = 0.0;
+
+    pitch = std::clamp(pitch, -89.0, 89.0);
+
     Update();
 }
 
