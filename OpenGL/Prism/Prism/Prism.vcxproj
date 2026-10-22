@@ -170,6 +170,8 @@
   <ItemGroup>
     <Text Include="BatchRendering.txt" />
     <Text Include="FirstShader.txt" />
+    <Text Include="PyramidShader.txt" />
+    <Text Include="test.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BufferLayout.h" />

@@ -104,6 +104,12 @@
     <Text Include="BatchRendering.txt">
       <Filter>Source Files</Filter>
     </Text>
+    <Text Include="PyramidShader.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="test.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="VertexBuffers.h">
