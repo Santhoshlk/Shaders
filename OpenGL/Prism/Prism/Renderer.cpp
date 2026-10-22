@@ -5,6 +5,7 @@
 
 Renderer::Renderer()
 {
+    glEnable(GL_DEPTH_TEST);
 }
 
 void Renderer::BlendAlpha() const
@@ -27,5 +28,6 @@ void Renderer::Draw(const VertexArray& vao, const IndexBuffer& ibo, const Shader
 
 void Renderer::Clear() const
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+   
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
