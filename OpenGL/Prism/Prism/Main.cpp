@@ -166,7 +166,9 @@ int main(void)
 
         glm::mat4 proj = glm::ortho(-4.f,4.f,-2.f,2.f,0.1f,100.f);
 
-        camera.InitializeCamera(glm::vec3(0.f, 0.f, 3.f), glm::vec3(0.f, 0.f, -1.f), 5.f, 0.25f, 90.f, 0.f);
+        
+
+        camera.InitializeCamera(glm::vec3(0.f, 0.f, 3.f), glm::vec3(0.f, 0.f, -1.f), 5.f, 0.25f, -90.f, 0.f);
 
 
         Renderer renderer;
