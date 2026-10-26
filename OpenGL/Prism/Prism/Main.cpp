@@ -5,13 +5,9 @@
 #include <cassert>
 #include <array>
 
-#include "VertexBuffers.h"
-#include "IndexBuffer.h"
-#include "VertexArray.h"
-#include "BufferLayout.h" 
+#include "Mesh.h" 
 #include "ShaderProgram.h"
 #include "Renderer.h"
-#include "Texture.h"
 #include "Camera.h"
 
 
@@ -36,8 +32,6 @@ GLFWwindow* mainwindow = nullptr;
 
 int bufferwidth, bufferheight;
 
-unsigned int VBO, VAO, IBO;
-
 
 float now = 0.f, deltatime = 0.f, lasttime =0.f;
 
@@ -46,7 +40,8 @@ float font_size = 1.5f;
 float elements_size = 1.5f;
 //** End **//
 
-
+std::vector<std::unique_ptr<Mesh>> meshobjs;
+std::vector<std::unique_ptr<ShaderProgram>> Shaders;
 
 
 void Print(const std::string& Message)
@@ -114,8 +109,6 @@ int main(void)
     // now create the viewport
     glViewport(0, 0, bufferwidth, bufferheight);
     {
-        VertexArray vao;
-        vao.Bind();
 
         float vertices[] = {
      -1.0f, -1.0f, 0.0f ,1.f,0.f,0.f,   // 0: base left
@@ -131,27 +124,25 @@ int main(void)
             0, 1, 2
         };
 
-
-
-        VertexBuffers vbo(vertices,24*sizeof(float));
-        vbo.Bind();
-
-        // buffer layout
+        std::unique_ptr<Mesh> obj1 = std::make_unique<Mesh>();
 
         BufferLayout layout;
-        layout.PushBuffers(0,3,GL_FLOAT,false,0);
+        layout.PushBuffers(0, 3, GL_FLOAT, false, 0);
         layout.PushBuffers(1, 3, GL_FLOAT, false, 3 * sizeof(float));
 
-        vao.addBuffer(vbo,layout);
+        obj1->AddBuffer(vertices, 24 * sizeof(float),layout);
+        obj1->AddIndices(indices, 12 * sizeof(unsigned int));
 
-        // ibo
-        IndexBuffer ibo(indices, 12 * sizeof(unsigned int));
+        meshobjs.push_back(std::move(obj1));
+
 
         // shader program
 
-        ShaderProgram shader("PyramidShader.txt");
+        std::unique_ptr<ShaderProgram> shader = std::make_unique<ShaderProgram>("PyramidShader.txt");
 
-        shader.Bind();
+        Shaders.push_back(std::move(shader));
+
+        Shaders[0]->Bind();
 
         // u can create ur translate etc
         glm::mat4 r(1.f);
@@ -184,9 +175,9 @@ int main(void)
             camera.HandleKeys(deltatime);
           
             glm::mat4 view = camera.GetViewMatrix();
-            shader.SetUniformMat4("u_mvp",proj*view);
+            Shaders[0]->SetUniformMat4("u_mvp",proj* view);
 
-            renderer.Draw(vao,ibo,shader);
+            renderer.Draw(meshobjs[0]->getVertexArray(),meshobjs[0]->getIndexBuffer(),*Shaders[0]);
             lasttime = now;
 
             
@@ -194,6 +185,7 @@ int main(void)
         }
         
     }
+    // delete all no need now as they are smart pointers
     glfwTerminate();
 
 }

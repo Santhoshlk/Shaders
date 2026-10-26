@@ -10,7 +10,10 @@ private:
     //unique indices ibo has to work with 
     unsigned int m_count;
 public:
+    IndexBuffer();
     IndexBuffer(const unsigned int* bufferdata, unsigned int buffersize);
+
+    void Create(const unsigned int* bufferdata, unsigned int buffersize);
 
     // unbind and bind matters in IndexBuffer
     void Bind() const;

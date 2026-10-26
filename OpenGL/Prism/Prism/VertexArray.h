@@ -17,6 +17,7 @@ public:
     // do the buffer layout for each buffer
 
     VertexArray();
+    void Create();
     
     VertexArray(const VertexArray& va) = delete;
     VertexArray& operator=(const VertexArray& va) = delete;

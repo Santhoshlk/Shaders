@@ -2,6 +2,7 @@ D:\Rendering\OpenGL\Prism\Prism\BufferLayout.cpp;D:\Rendering\OpenGL\Prism\Prism
 D:\Rendering\OpenGL\Prism\Prism\Camera.cpp;D:\Rendering\OpenGL\Prism\Prism\x64\Debug\Camera.obj
 D:\Rendering\OpenGL\Prism\Prism\IndexBuffer.cpp;D:\Rendering\OpenGL\Prism\Prism\x64\Debug\IndexBuffer.obj
 D:\Rendering\OpenGL\Prism\Prism\Main.cpp;D:\Rendering\OpenGL\Prism\Prism\x64\Debug\Main.obj
+D:\Rendering\OpenGL\Prism\Prism\Mesh.cpp;D:\Rendering\OpenGL\Prism\Prism\x64\Debug\Mesh.obj
 D:\Rendering\OpenGL\Prism\Prism\Renderer.cpp;D:\Rendering\OpenGL\Prism\Prism\x64\Debug\Renderer.obj
 D:\Rendering\OpenGL\Prism\Prism\ShaderProgram.cpp;D:\Rendering\OpenGL\Prism\Prism\x64\Debug\ShaderProgram.obj
 D:\Rendering\OpenGL\Prism\Prism\stb_image.cpp;D:\Rendering\OpenGL\Prism\Prism\x64\Debug\stb_image.obj

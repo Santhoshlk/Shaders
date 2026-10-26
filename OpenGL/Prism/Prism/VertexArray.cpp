@@ -2,9 +2,14 @@
 
 #include "VertexBuffers.h"
 #include "BufferLayout.h"
+#include <iostream>
 
 
 VertexArray::VertexArray()
+{
+}
+
+void VertexArray::Create()
 {
     glGenVertexArrays(1, &m_RenderId);
     glBindVertexArray(m_RenderId);
@@ -13,6 +18,7 @@ VertexArray::VertexArray()
 void VertexArray::Bind() const
 {
     glBindVertexArray(m_RenderId);
+    std::cout << "vertex Array Binded " << std::endl;
 }
 
 void VertexArray::UnBind() const
