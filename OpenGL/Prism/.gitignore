@@ -1,0 +1,27 @@
+# Build output
+x64/
+x86/
+Debug/
+Release/
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio cache / user files
+.vs/
+*.user
+*.suo
+*.VC.db
+*.VC.opendb
+ipch/
+
+# Compiler / linker intermediates
+*.pdb
+*.idb
+*.ilk
+*.obj
+*.tlog
+*.log
+*.iobj
+*.ipdb
+*.exp
+*.recipe
