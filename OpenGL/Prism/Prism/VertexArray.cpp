@@ -18,7 +18,7 @@ void VertexArray::Create()
 void VertexArray::Bind() const
 {
     glBindVertexArray(m_RenderId);
-    std::cout << "vertex Array Binded " << std::endl;
+  
 }
 
 void VertexArray::UnBind() const

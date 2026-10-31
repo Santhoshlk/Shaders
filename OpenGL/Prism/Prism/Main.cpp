@@ -169,8 +169,7 @@ int main(void)
             glfwPollEvents();
             
             renderer.Clear();
-            //Do the actual rendering here
-            // update the camera turn and movement here
+         
             camera.HandleCursor();
             camera.HandleKeys(deltatime);
           

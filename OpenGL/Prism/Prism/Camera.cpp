@@ -58,7 +58,7 @@ void Camera::CursorCallback(GLFWwindow* window, double xpos, double ypos)
     // find the changes
 
     camera->xchange = xpos - camera->lastxpos;
-    camera->ychange = ypos - camera->lastypos;
+    camera->ychange =  camera->lastypos - ypos;
 
     camera->lastxpos = xpos;
     camera->lastypos = ypos;
@@ -86,7 +86,7 @@ void Camera::Update()
 
 glm::mat4 Camera::GetViewMatrix()
 {
-    return glm::lookAt(Cameraposition, Cameraposition + front, up);
+    return glm::lookAt(Cameraposition,Cameraposition+front,up);
 }
 
 void Camera::HandleCursor()
@@ -109,26 +109,25 @@ void Camera::HandleKeys(float deltatime)
 
     // next u write the logic to handle keys
     // in opengl front is z right is x and up is y
-    if (Keys[GLFW_KEY_W])
-    {
-        float dist = movementspeed * deltatime;
-        Cameraposition += front * dist;
-    }
-    if (Keys[GLFW_KEY_S])
+    if (Keys[GLFW_KEY_W] || Keys[GLFW_KEY_UP])
     {
         float dist = movementspeed * deltatime;
         Cameraposition -= front * dist;
     }
-    if (Keys[GLFW_KEY_A])
+    if (Keys[GLFW_KEY_S] || Keys[GLFW_KEY_DOWN])
     {
         float dist = movementspeed * deltatime;
-        Cameraposition -= right * dist;
+        Cameraposition += front * dist;
     }
-    if (Keys[GLFW_KEY_D])
+    if (Keys[GLFW_KEY_A] || Keys[GLFW_KEY_LEFT])
     {
         float dist = movementspeed * deltatime;
         Cameraposition += right * dist;
-        
+    }
+    if (Keys[GLFW_KEY_D] || Keys[GLFW_KEY_RIGHT])
+    {
+        float dist = movementspeed * deltatime;
+        Cameraposition -= right * dist;
     }
 
 }
