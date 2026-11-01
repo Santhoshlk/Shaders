@@ -112,22 +112,22 @@ void Camera::HandleKeys(float deltatime)
     if (Keys[GLFW_KEY_W] || Keys[GLFW_KEY_UP])
     {
         float dist = movementspeed * deltatime;
-        Cameraposition -= front * dist;
+        Cameraposition += front * dist;
     }
     if (Keys[GLFW_KEY_S] || Keys[GLFW_KEY_DOWN])
     {
         float dist = movementspeed * deltatime;
-        Cameraposition += front * dist;
+        Cameraposition -= front * dist;
     }
     if (Keys[GLFW_KEY_A] || Keys[GLFW_KEY_LEFT])
     {
         float dist = movementspeed * deltatime;
-        Cameraposition += right * dist;
+        Cameraposition -= right * dist;
     }
     if (Keys[GLFW_KEY_D] || Keys[GLFW_KEY_RIGHT])
     {
         float dist = movementspeed * deltatime;
-        Cameraposition -= right * dist;
+        Cameraposition += right * dist;
     }
 
 }

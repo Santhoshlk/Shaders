@@ -4,6 +4,8 @@
 #include <GLFW/glfw3.h>
 #include <cassert>
 #include <array>
+#include <cmath>
+
 
 #include "Mesh.h" 
 #include "ShaderProgram.h"
@@ -28,6 +30,8 @@
 
 const unsigned int width = 1500, height = 750;
 
+const float degtoradians = 0.01745f;
+
 GLFWwindow* mainwindow = nullptr;
 
 int bufferwidth, bufferheight;
@@ -51,7 +55,26 @@ void Print(const std::string& Message)
     ImGui::Text(Message.c_str());
 }
 
+glm::mat4 perspeciveProjection(float anglefov,float width,float height,float znear, float zfar)
+{
+    glm::mat4 arr(0.f);
 
+
+    float Halfangle = anglefov / 2.f;
+   float f = 1.f/ std::tanf(Halfangle);
+
+   float aspectratio = height / width;
+
+   arr[0][0] = aspectratio * f;
+   arr[1][1] = f;
+
+   float l = zfar / (zfar - znear);
+   arr[2][2] = -l;
+   arr[3][2] = -l * znear;
+   arr[2][3] = -1.f;
+
+   return arr;
+}
 
 int main(void)
 {
@@ -155,9 +178,12 @@ int main(void)
 
         glm::mat4 model = t * r;
 
-        glm::mat4 proj = glm::ortho(-4.f,4.f,-2.f,2.f,0.1f,100.f);
+        // glm::mat4 proj = glm::perspective(glm::radians(60.f),(float)width/(float)height,0.1f,100.f);
 
-        camera.InitializeCamera(glm::vec3(0.f, 0.f, 3.f), glm::vec3(0.f, 0.f, -1.f), 5.f, 0.25f, 90.f, 0.f);
+        camera.InitializeCamera(glm::vec3(0.f, 0.f, 3.f), glm::vec3(0.f, 0.f, -1.f), 5.f, 0.25f, -90.f, 0.f);
+
+
+     auto proj = perspeciveProjection(degtoradians* 45.f,width,height,0.1f,100.f);
 
 
         Renderer renderer;
@@ -174,7 +200,8 @@ int main(void)
             camera.HandleKeys(deltatime);
           
             glm::mat4 view = camera.GetViewMatrix();
-            Shaders[0]->SetUniformMat4("u_mvp",proj* view);
+            Shaders[0]->SetUniformMat4("u_proj",proj);
+            Shaders[0]->SetUniformMat4("u_view", view);
 
             renderer.Draw(meshobjs[0]->getVertexArray(),meshobjs[0]->getIndexBuffer(),*Shaders[0]);
             lasttime = now;
