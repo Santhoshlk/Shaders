@@ -76,7 +76,7 @@ glm::mat4 perspeciveProjection(float anglefov,float width,float height,float zne
    return arr;
 }
 
-int main(void)
+nt main(void)
 {
     // extension name 
 
