@@ -7,6 +7,7 @@
 #include <cmath>
 
 
+#include "Texture.h"
 #include "Mesh.h" 
 #include "ShaderProgram.h"
 #include "Renderer.h"
@@ -59,24 +60,26 @@ glm::mat4 perspeciveProjection(float anglefov,float width,float height,float zne
 {
     glm::mat4 arr(0.f);
 
-
+     
     float Halfangle = anglefov / 2.f;
    float f = 1.f/ std::tanf(Halfangle);
 
    float aspectratio = height / width;
 
-   arr[0][0] = aspectratio * f;
+   // here opengl uses right hand thumb rule so birds eye is -z so math changes to thisSS
+
+   arr[0][0] =  f* aspectratio;
    arr[1][1] = f;
 
-   float l = zfar / (zfar - znear);
+   float l = (zfar + znear) / (zfar - znear);
    arr[2][2] = -l;
-   arr[3][2] = -l * znear;
+   arr[3][2] = -2.f * znear * zfar / (zfar - znear);
    arr[2][3] = -1.f;
 
    return arr;
 }
 
-nt main(void)
+int main(void)
 {
     // extension name 
 
@@ -133,27 +136,40 @@ nt main(void)
     glViewport(0, 0, bufferwidth, bufferheight);
     {
 
-        float vertices[] = {
-     -1.0f, -1.0f, 0.0f ,1.f,0.f,0.f,   // 0: base left
-      0.0f, -1.0f, 1.0f,0.f,1.f,0.f,// 1: base front (out in Z)
-      1.0f, -1.0f, 0.0f,0.f,0.f,1.f,   // 2: base right
-      0.0f,  1.0f, 0.0f ,1.f,0.f,1.f   // 3: top
-        };
+     float vertices[] = {
+                 
+         // Face 1: left, top, front
+        -1.0f, -1.0f, 0.0f,   0.0f, 0.0f,
+         0.0f,  1.0f, 0.0f,   0.5f, 1.0f,
+         0.0f, -1.0f, 1.0f,   1.0f, 0.0f,
+         // Face 2: front, top, right
+          0.0f, -1.0f, 1.0f,   0.0f, 0.0f,
+          0.0f,  1.0f, 0.0f,   0.5f, 1.0f,
+          1.0f, -1.0f, 0.0f,   1.0f, 0.0f,
+          // Face 3: right, top, left
+           1.0f, -1.0f, 0.0f,   0.0f, 0.0f,
+           0.0f,  1.0f, 0.0f,   0.5f, 1.0f,
+          -1.0f, -1.0f, 0.0f,   1.0f, 0.0f,
+          // Face 4 (bottom): left, front, right
+          -1.0f, -1.0f, 0.0f,   0.0f, 0.0f,
+           0.0f, -1.0f, 1.0f,   0.5f, 1.0f,
+           1.0f, -1.0f, 0.0f,   1.0f, 0.0f,
+     };
 
         unsigned int indices[] = {
-            0, 3, 1,
-            1, 3, 2,
-            2, 3, 0,
-            0, 1, 2
+            0, 1, 2,
+            3, 4, 5,
+            6, 7, 8,
+            9, 10, 11
         };
 
         std::unique_ptr<Mesh> obj1 = std::make_unique<Mesh>();
 
         BufferLayout layout;
         layout.PushBuffers(0, 3, GL_FLOAT, false, 0);
-        layout.PushBuffers(1, 3, GL_FLOAT, false, 3 * sizeof(float));
+        layout.PushBuffers(1, 2, GL_FLOAT, false, 3 * sizeof(float));
 
-        obj1->AddBuffer(vertices, 24 * sizeof(float),layout);
+        obj1->AddBuffer(vertices, 60 * sizeof(float),layout);
         obj1->AddIndices(indices, 12 * sizeof(unsigned int));
 
         meshobjs.push_back(std::move(obj1));
@@ -161,7 +177,7 @@ nt main(void)
 
         // shader program
 
-        std::unique_ptr<ShaderProgram> shader = std::make_unique<ShaderProgram>("PyramidShader.txt");
+        std::unique_ptr<ShaderProgram> shader = std::make_unique<ShaderProgram>("PyramidTexture.txt");
 
         Shaders.push_back(std::move(shader));
 
@@ -184,6 +200,14 @@ nt main(void)
 
 
      auto proj = perspeciveProjection(degtoradians* 45.f,width,height,0.1f,100.f);
+
+        // Here Do the textures
+     std::unique_ptr<Texture> MarbleTexture = std::make_unique<Texture>(R"(D:\Rendering\OpenGL\Prism\Prism\assets\brick.png)",GL_NEAREST_MIPMAP_NEAREST,GL_REPEAT);
+
+     MarbleTexture->Bind(0);
+     Shaders[0]->SetUniform1i("u_slot",0);
+     // u Have bound texture u have loaded it and bound it and send it 
+
 
 
         Renderer renderer;
@@ -211,7 +235,9 @@ nt main(void)
         }
         
     }
-    // delete all no need now as they are smart pointers
+    // clean them before contex it dead
+    meshobjs.clear();
+    Shaders.clear();
     glfwTerminate();
 
 }

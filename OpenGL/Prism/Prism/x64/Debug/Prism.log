@@ -1,3 +1,5 @@
 ﻿  Main.cpp
-D:\Rendering\OpenGL\Prism\Prism\Main.cpp(193,30): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\Rendering\OpenGL\Prism\Prism\Main.cpp(217,30): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Texture.cpp
+  Generating Code...
   Prism.vcxproj -> D:\Rendering\OpenGL\Prism\x64\Debug\Prism.exe

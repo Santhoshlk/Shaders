@@ -172,6 +172,7 @@
     <Text Include="BatchRendering.txt" />
     <Text Include="FirstShader.txt" />
     <Text Include="PyramidShader.txt" />
+    <Text Include="PyramidTexture.txt" />
     <Text Include="test.txt" />
   </ItemGroup>
   <ItemGroup>

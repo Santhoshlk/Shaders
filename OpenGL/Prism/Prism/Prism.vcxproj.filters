@@ -113,6 +113,9 @@
     <Text Include="test.txt">
       <Filter>Source Files</Filter>
     </Text>
+    <Text Include="PyramidTexture.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="VertexBuffers.h">

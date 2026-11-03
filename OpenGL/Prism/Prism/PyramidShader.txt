@@ -12,13 +12,8 @@ uniform mat4 u_proj;
 
 void main()
 {
-   vec4 result = u_proj * u_view * vec4(pos,1.f);
-
-   vec4 positions = vec4(1.f);
-    positions.x = result.x/result.w;
-    positions.y = result.y/result.w;
-    positions.z = result.z/result.w;
-   gl_Position = positions;
+   vec4 result = u_proj * u_view * vec4(pos,1.f); 
+   gl_Position = result;
    v_color = color;
 }
 
