@@ -37,13 +37,15 @@ private:
     unsigned int  CreateShaderProgram(const std::string& VertexShader, const std::string& FragmentShader);
 public:
     
-    void SetUniform4f(const std::string& uniform,float f1,float f2,float f3,float f4);
+    void SetUniform4f(const std::string& uniform,float f1,float f2,float f3,float f4) ;
 
     void SetUnifom1f(const std::string& uniform, float f1);
 
     void SetUniform1i(const std::string& uniform, int i);
 
     void SetUniformMat4(const std::string& unifrom, const glm::mat4& mat);
+
+    void SetUniform3f(const std::string& uniform, float f1, float f2, float f3);
 
     int Uniformlocation(const std::string& uniform);
 

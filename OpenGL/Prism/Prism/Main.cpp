@@ -12,6 +12,7 @@
 #include "ShaderProgram.h"
 #include "Renderer.h"
 #include "Camera.h"
+#include "LightBase.h"
 
 
 //**External Linked Libs Start**//
@@ -192,7 +193,7 @@ int main(void)
 
         t = glm::translate(t, glm::vec3(0.25f,0.f,0.f));
 
-        glm::mat4 model = t * r;
+        glm::mat4 model(1.f);
 
         // glm::mat4 proj = glm::perspective(glm::radians(60.f),(float)width/(float)height,0.1f,100.f);
 
@@ -207,7 +208,10 @@ int main(void)
      MarbleTexture->Bind(0);
      Shaders[0]->SetUniform1i("u_slot",0);
      // u Have bound texture u have loaded it and bound it and send it 
+     glm::vec4 Color(1.f, 1.f, 1.f, 1.f);
 
+     LightBase light_Directional(Color,255.f);
+     light_Directional.UseLight(*Shaders[0]);
 
 
         Renderer renderer;
@@ -219,6 +223,7 @@ int main(void)
             glfwPollEvents();
             
             renderer.Clear();
+          
          
             camera.HandleCursor();
             camera.HandleKeys(deltatime);
@@ -226,6 +231,7 @@ int main(void)
             glm::mat4 view = camera.GetViewMatrix();
             Shaders[0]->SetUniformMat4("u_proj",proj);
             Shaders[0]->SetUniformMat4("u_view", view);
+            Shaders[0]->SetUniformMat4("u_model",model);
 
             renderer.Draw(meshobjs[0]->getVertexArray(),meshobjs[0]->getIndexBuffer(),*Shaders[0]);
             lasttime = now;

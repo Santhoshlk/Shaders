@@ -137,6 +137,19 @@ void ShaderProgram::SetUniformMat4(const std::string& uniform, const glm::mat4& 
     glUniformMatrix4fv(location, 1, GL_FALSE, &mat[0][0]);
 }
 
+void ShaderProgram::SetUniform3f(const std::string& uniform, float f1, float f2, float f3)
+{
+    auto location = Uniformlocation(uniform);
+
+    if (location == -1)
+    {
+        std::cout << "The Location is not valid" << std::endl;
+        return;
+    }
+    glUniform3f(location,f1,f2,f3);
+
+}
+
 int ShaderProgram::Uniformlocation(const std::string& uniform)
 {
     if (!uniformcache.contains(uniform))
