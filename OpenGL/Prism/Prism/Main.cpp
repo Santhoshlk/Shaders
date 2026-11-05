@@ -80,6 +80,55 @@ glm::mat4 perspeciveProjection(float anglefov,float width,float height,float zne
    return arr;
 }
 
+void PopulateAveragesOfNormals(float vertices[],unsigned int indices[],int UniqueIndices,int v_count, int i_count,int sides)
+{
+    // which holds all our normals
+    std::vector<glm::vec3> v(UniqueIndices);
+    std::vector<glm::vec3> normals(UniqueIndices,glm::vec3(0.f));
+   
+   // first fill all the vertices
+    // 8 as x , y , z , u , v , n1 , n2 , n3
+    int k = 0;
+    for (int i = 0;i<v_count;i+=8)
+    {
+        v[k].x = vertices[i];
+        v[k].y = vertices[i + 1];
+        v[k].z = vertices[i + 2];
+        k++;
+    }
+
+    for (int i = 0;i<i_count;i+=3)
+    {
+        unsigned int v0 = indices[i];
+        unsigned int v1 = indices[i + 1];
+        unsigned int v2 = indices[i + 2];
+
+       normals[v0]+= glm::normalize(glm::cross(v[v2] - v[v0], v[v1] - v[v0]));
+       normals[v1] += glm::normalize(glm::cross(v[v2] - v[v0], v[v1] - v[v0]));
+       normals[v2] += glm::normalize(glm::cross(v[v2] - v[v0], v[v1] - v[v0]));
+    }
+
+    // now u need to average out them by the sides
+    for (int i = 0;i<normals.size();i++)
+    {
+        normals[i] = glm::vec3(normals[i].x / (float)sides, normals[i].y / (float)sides, normals[i].z / (float)sides);
+    }
+
+    // shader handles the normalization of this so u can just use this to find and populate the normals in vertices
+    k = 0;
+    for (int i = 5;i<v_count;i+=8)
+    {
+        // just go and populate the normals
+        vertices[i] = normals[k].x;
+        vertices[i + 1] = normals[k].y;
+        vertices[i + 2] = normals[k].z;
+        k++;
+    }
+
+}
+
+
+
 int main(void)
 {
     // extension name 
@@ -137,7 +186,7 @@ int main(void)
     glViewport(0, 0, bufferwidth, bufferheight);
     {
 
-     float vertices[] = {
+     std::array<float,60> vertices = {
                  
          // Face 1: left, top, front
         -1.0f, -1.0f, 0.0f,   0.0f, 0.0f,
@@ -157,7 +206,7 @@ int main(void)
            1.0f, -1.0f, 0.0f,   1.0f, 0.0f,
      };
 
-        unsigned int indices[] = {
+       std::array<unsigned int ,12> indices = {
             0, 1, 2,
             3, 4, 5,
             6, 7, 8,
@@ -170,8 +219,8 @@ int main(void)
         layout.PushBuffers(0, 3, GL_FLOAT, false, 0);
         layout.PushBuffers(1, 2, GL_FLOAT, false, 3 * sizeof(float));
 
-        obj1->AddBuffer(vertices, 60 * sizeof(float),layout);
-        obj1->AddIndices(indices, 12 * sizeof(unsigned int));
+        obj1->AddBuffer(vertices.data(), 60 * sizeof(float),layout);
+        obj1->AddIndices(indices.data(), 12 * sizeof(unsigned int));
 
         meshobjs.push_back(std::move(obj1));
 
@@ -209,8 +258,10 @@ int main(void)
      Shaders[0]->SetUniform1i("u_slot",0);
      // u Have bound texture u have loaded it and bound it and send it 
      glm::vec4 Color(1.f, 1.f, 1.f, 1.f);
+     glm::vec3 Direction(1.f, 0.f, 0.f);
 
-     LightBase light_Directional(Color,255.f);
+
+     LightBase light_Directional(Direction,1.f,Color,1.f);
      light_Directional.UseLight(*Shaders[0]);
 
 
