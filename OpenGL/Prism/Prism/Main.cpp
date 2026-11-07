@@ -275,9 +275,12 @@ int main(void)
             
             glfwSwapBuffers(mainwindow);
         }
+
+        MarbleTexture.reset();
         
     }
     // clean them before contex it dead
+   
     meshobjs.clear();
     Shaders.clear();
     glfwTerminate();

@@ -1,3 +1,1 @@
-﻿  Main.cpp
-D:\Rendering\OpenGL\Prism\Prism\Main.cpp(254,30): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-  Prism.vcxproj -> D:\Rendering\OpenGL\Prism\x64\Debug\Prism.exe
+﻿  Prism.vcxproj -> D:\Rendering\OpenGL\Prism\x64\Debug\Prism.exe

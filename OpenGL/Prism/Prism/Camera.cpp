@@ -91,8 +91,11 @@ glm::mat4 Camera::GetViewMatrix()
 
 void Camera::HandleCursor()
 {
+if (!bfirstmovement)
+{
     yaw += xchange * static_cast<double>(turnspeed);
     pitch += ychange * static_cast<double>(turnspeed);
+}
 
     xchange = 0.0;
     ychange = 0.0;
