@@ -24,9 +24,7 @@
 
 //~Begin Interface ImGui
 
-#include "ImGUI/imgui.h"
-#include "ImGuI/Backend/imgui_impl_glfw.h"
-#include "ImGUi/Backend/imgui_impl_opengl3.h"
+
 //**External Linked Libs End**//
 
 
@@ -41,21 +39,11 @@ int bufferwidth, bufferheight;
 
 float now = 0.f, deltatime = 0.f, lasttime =0.f;
 
-//** ImGui GLOBAL CONSTANTS**//
-float font_size = 1.5f;
-float elements_size = 1.5f;
-//** End **//
 
 std::vector<std::unique_ptr<Mesh>> meshobjs;
 std::vector<std::unique_ptr<ShaderProgram>> Shaders;
 
 
-void Print(const std::string& Message)
-{
-    // using imgui
-    ImGui::SameLine();
-    ImGui::Text(Message.c_str());
-}
 
 glm::mat4 perspeciveProjection(float anglefov,float width,float height,float znear, float zfar)
 {
@@ -103,15 +91,15 @@ void PopulateAveragesOfNormals(float vertices[],unsigned int indices[],int Uniqu
         unsigned int v1 = indices[i + 1];
         unsigned int v2 = indices[i + 2];
 
-       normals[v0]+= glm::normalize(glm::cross(v[v2] - v[v0], v[v1] - v[v0]));
-       normals[v1] += glm::normalize(glm::cross(v[v2] - v[v0], v[v1] - v[v0]));
-       normals[v2] += glm::normalize(glm::cross(v[v2] - v[v0], v[v1] - v[v0]));
+       normals[v0]+= glm::normalize(glm::cross(v[v1] - v[v0], v[v2] - v[v0]));
+       normals[v1] += glm::normalize(glm::cross(v[v1] - v[v0], v[v2] - v[v0]));
+       normals[v2] += glm::normalize(glm::cross(v[v1] - v[v0], v[v2] - v[v0]));
     }
 
     // now u need to average out them by the sides
     for (int i = 0;i<normals.size();i++)
     {
-        normals[i] = glm::vec3(normals[i].x / (float)sides, normals[i].y / (float)sides, normals[i].z / (float)sides);
+        normals[i] = glm::normalize(normals[i]);
     }
 
     // shader handles the normalization of this so u can just use this to find and populate the normals in vertices
@@ -186,31 +174,19 @@ int main(void)
     glViewport(0, 0, bufferwidth, bufferheight);
     {
 
-     std::array<float,60> vertices = {
-                 
-         // Face 1: left, top, front
-        -1.0f, -1.0f, 0.0f,   0.0f, 0.0f,
-         0.0f,  1.0f, 0.0f,   0.5f, 1.0f,
-         0.0f, -1.0f, 1.0f,   1.0f, 0.0f,
-         // Face 2: front, top, right
-          0.0f, -1.0f, 1.0f,   0.0f, 0.0f,
-          0.0f,  1.0f, 0.0f,   0.5f, 1.0f,
-          1.0f, -1.0f, 0.0f,   1.0f, 0.0f,
-          // Face 3: right, top, left
-           1.0f, -1.0f, 0.0f,   0.0f, 0.0f,
-           0.0f,  1.0f, 0.0f,   0.5f, 1.0f,
-          -1.0f, -1.0f, 0.0f,   1.0f, 0.0f,
-          // Face 4 (bottom): left, front, right
-          -1.0f, -1.0f, 0.0f,   0.0f, 0.0f,
-           0.0f, -1.0f, 1.0f,   0.5f, 1.0f,
-           1.0f, -1.0f, 0.0f,   1.0f, 0.0f,
-     };
+        std::array<float, 32> vertices = {
+            // x      y      z      u     v      nx    ny    nz
+            -1.0f, -1.0f,  0.0f,   0.0f, 0.0f,   0.0f, 0.0f, 0.0f,   // 0: left
+             0.0f,  1.0f,  0.0f,   0.5f, 1.0f,   0.0f, 0.0f, 0.0f,   // 1: top
+             0.0f, -1.0f,  1.0f,   0.5f, 0.0f,   0.0f, 0.0f, 0.0f,   // 2: front
+             1.0f, -1.0f,  0.0f,   1.0f, 0.0f,   0.0f, 0.0f, 0.0f,   // 3: right
+        };
 
-       std::array<unsigned int ,12> indices = {
-            0, 1, 2,
-            3, 4, 5,
-            6, 7, 8,
-            9, 10, 11
+        std::array<unsigned int, 12> indices = {
+            0, 1, 2,   // Face 1: left, top, front
+            2, 1, 3,   // Face 2: front, top, right
+            3, 1, 0,   // Face 3: right, top, left
+            0, 2, 3    // Face 4 (bottom): left, front, right
         };
 
         std::unique_ptr<Mesh> obj1 = std::make_unique<Mesh>();
@@ -218,6 +194,13 @@ int main(void)
         BufferLayout layout;
         layout.PushBuffers(0, 3, GL_FLOAT, false, 0);
         layout.PushBuffers(1, 2, GL_FLOAT, false, 3 * sizeof(float));
+        layout.PushBuffers(2, 3, GL_FLOAT, false, 5 * sizeof(float));
+
+
+        // now process the avg normals
+        PopulateAveragesOfNormals(vertices.data(), indices.data(), 4, 32, 12, 3);
+
+
 
         obj1->AddBuffer(vertices.data(), 60 * sizeof(float),layout);
         obj1->AddIndices(indices.data(), 12 * sizeof(unsigned int));
@@ -236,14 +219,13 @@ int main(void)
         // u can create ur translate etc
         glm::mat4 r(1.f);
 
-        r = glm::rotate(r,glm::radians(45.f), glm::vec3(1.f, 1.f, 0.f));
+        r = glm::rotate_slow(r,degtoradians*45.f,glm::vec3(0.f,1.f,0.f));
 
         glm::mat4 t(1.f);
 
-        t = glm::translate(t, glm::vec3(0.25f,0.f,0.f));
+        // t = glm::translate(t, glm::vec3(0.25f,0.f,0.f));
 
-        glm::mat4 model(1.f);
-
+       
         // glm::mat4 proj = glm::perspective(glm::radians(60.f),(float)width/(float)height,0.1f,100.f);
 
         camera.InitializeCamera(glm::vec3(0.f, 0.f, 3.f), glm::vec3(0.f, 0.f, -1.f), 5.f, 0.25f, -90.f, 0.f);
@@ -280,6 +262,9 @@ int main(void)
             camera.HandleKeys(deltatime);
           
             glm::mat4 view = camera.GetViewMatrix();
+            r = glm::rotate_slow(r, degtoradians * 0.5f, glm::vec3(0.f, 1.f, 0.f));
+            glm::mat4 model = t * r;
+
             Shaders[0]->SetUniformMat4("u_proj",proj);
             Shaders[0]->SetUniformMat4("u_view", view);
             Shaders[0]->SetUniformMat4("u_model",model);
